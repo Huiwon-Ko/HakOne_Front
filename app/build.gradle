@@ -6,9 +6,21 @@ android {
     namespace 'com.example.hakone'
     compileSdk 33
 
-    defaultConfig {
+    packagingOptions {
+        exclude("META-INF/DEPENDENCIES")
+        exclude("META-INF/LICENSE")
+        exclude("META-INF/LICENSE.txt")
+        exclude("META-INF/license.txt")
+        exclude("META-INF/NOTICE")
+        exclude("META-INF/NOTICE.txt")
+        exclude("META-INF/notice.txt")
+        exclude("META-INF/ASL2.0")
+        exclude("META-INF/*.kotlin_module")
+    }
+
+        defaultConfig {
         applicationId "com.example.hakone"
-        minSdk 21
+        minSdk 26
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -26,6 +38,7 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    useLibrary 'org.apache.http.legacy'
 }
 
 dependencies {
@@ -42,5 +55,8 @@ dependencies {
 
     //noinspection GradleCompatible
     implementation 'com.android.support:design:28.0.0'
+
+
+    api 'com.github.ok2c.hc4.android:httpclient-android:0.1.0'
 
 }

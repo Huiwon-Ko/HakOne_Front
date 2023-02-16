@@ -10,7 +10,7 @@
         android:id="@+id/profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        tools:layout_editor_absoluteX="141dp"
+        app:layout_constraintStart_toEndOf="@+id/textView2"
         tools:layout_editor_absoluteY="388dp"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -37,7 +37,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:text="Name"
-        tools:layout_editor_absoluteX="58dp"
-        tools:layout_editor_absoluteY="148dp" />
+        app:layout_constraintStart_toEndOf="@+id/textview"
+        tools:layout_editor_absoluteY="153dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

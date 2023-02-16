@@ -3,20 +3,39 @@ package com.example.hakone;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.net.Credentials;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.Scopes;
 import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
+
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,8 +57,12 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         btn_google.setOnClickListener(this);
 
         // 로그인 버튼 클릭 시 기본적인 옵션 세팅.  유저의 ID와 기본적인 프로필 정보를 요청
+        String serverClientId = getString(R.string.server_client_id); //추가한 부분
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail() //추가로 email 요청 (필요?)
+                .requestScopes(new Scope(Scopes.DRIVE_APPFOLDER))
+                .requestServerAuthCode(serverClientId)
+                .requestIdToken(getString(R.string.server_client_id)) //추가한 부분
+                .requestEmail() //email 요청 (필요?) //리퀘스트
                 .build();
 
         // Build a GoogleSignInClient with the options specified by gso. -> 위의 옵션 사용해서 GoogleSignIn 객체 생성
@@ -49,17 +72,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         //GoogleSignIn.getLastSignedInAccount가 null가 아닌 GoogleSignInAccount 객체를 반환하면 사용자가 이미 Google로 앱에 로그인한 것.
         GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(Login.this);
 
-        // 로그인 되있는 경우 (토큰으로 로그인 처리)
+
+        // 이미 로그인 되있는 경우
         if (gsa != null && gsa.getId() != null) {
                 //이 경우 로그인 성공
+            Toast.makeText(this, "이미 로그인 함", Toast.LENGTH_SHORT).show();
         }
-
     }
 
     //GoogleSignIn.getLastSignedInAccount 메서드를 사용하여 현재 로그인한 사용자의 프로필 정보를 요청
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
             GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
+            String idToken = acct.getIdToken(); //추가한 부분
+
 
             if (acct != null) {
                 String personName = acct.getDisplayName();
@@ -75,14 +101,42 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 Log.d(TAG, "handleSignInResult:personId "+personId);
                 Log.d(TAG, "handleSignInResult:personFamilyName "+personFamilyName);
                 Log.d(TAG, "handleSignInResult:personPhoto "+personPhoto);
+
+
+
+
+                // TODO(developer): send ID Token to server and validate
+                //추가한 부분
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin"); //추후 수정 필요
+
+                try {
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                    nameValuePairs.add(new BasicNameValuePair("idToken", idToken));
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse response = httpClient.execute(httpPost);
+                    int statusCode = response.getStatusLine().getStatusCode();
+                    final String responseBody = EntityUtils.toString(response.getEntity());
+                    Log.i(TAG, "Signed in as: " + responseBody);
+                } catch (ClientProtocolException e) {
+                    Log.e(TAG, "Error sending ID token to backend.", e);
+                } catch (IOException e) {
+                    Log.e(TAG, "Error sending ID token to backend.", e);
+                }
+                //
+
             }
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             // Please refer to the GoogleSignInStatusCodes class reference for more information.
             Log.e(TAG, "signInResult:failed code=" + e.getStatusCode());
 
+            //updateUI(null);
+
         }
     }
+
 
     @Override  //활동의 onClick 메서드에서 getSignInIntent 메서드로 로그인 인텐트를 만들고 startActivityForResult로 인텐트를 시작하여 로그인 버튼 탭을 처리
     public void onClick(View v) {
@@ -110,7 +164,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) { //구글 로그인 인증을 요청 했을 때 결과 값을 되돌려 받는 곳
         super.onActivityResult(requestCode, resultCode, data);
 
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
@@ -118,7 +172,47 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+
+            //여기서부터 추가한 부분. 사용자가 성공적으로 로그인하면 getServerAuthCode로 사용자의 인증 코드를 가져옴.
+            try {
+                GoogleSignInAccount account = task.getResult(ApiException.class);
+                String authCode = account.getServerAuthCode();
+
+                // Show signed-un UI
+                //updateUI(account);
+                Intent intent = new Intent(getApplicationContext(), Home.class);
+                startActivity(intent);
+
+                //추가
+                // TODO(developer): send code to server and exchange for access/refresh/ID tokens
+                HttpPost httpPost = new HttpPost("https://yourbackend.example.com/authcode");
+                HttpClient httpClient = new DefaultHttpClient();
+
+                try {
+                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                    nameValuePairs.add(new BasicNameValuePair("authCode", authCode));
+                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+
+                    HttpResponse response = httpClient.execute(httpPost);
+
+                    int statusCode = response.getStatusLine().getStatusCode();
+                    final String responseBody = EntityUtils.toString(response.getEntity());
+
+                } catch (ClientProtocolException e) {
+                    Log.e(TAG, "Error sending auth code to backend.", e);
+                } catch (IOException e) {
+                    Log.e(TAG, "Error sending auth code to backend.", e);
+                }
+
+
+
+            } catch (ApiException e) {
+                Log.w(TAG, "Sign-in failed", e);
+                //updateUI(null);
+            }
             handleSignInResult(task);
+
+
         }
     }
 
