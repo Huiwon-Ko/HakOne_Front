@@ -8,9 +8,10 @@
 
     <ImageView
         android:id="@+id/profile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@+id/textView2"
+        android:layout_width="159dp"
+        android:layout_height="151dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         tools:layout_editor_absoluteY="388dp"
         tools:srcCompat="@tools:sample/avatars" />
 
@@ -39,5 +40,30 @@
         android:text="Name"
         app:layout_constraintStart_toEndOf="@+id/textview"
         tools:layout_editor_absoluteY="153dp" />
+
+    <Button
+        android:id="@+id/register"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="등록"
+        tools:layout_editor_absoluteX="246dp"
+        tools:layout_editor_absoluteY="634dp" />
+
+    <Button
+        android:id="@+id/cancel_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="취소"
+        tools:layout_editor_absoluteX="70dp"
+        tools:layout_editor_absoluteY="634dp" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingActionButton2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        app:srcCompat="@android:drawable/btn_plus"
+        tools:layout_editor_absoluteX="223dp"
+        tools:layout_editor_absoluteY="481dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

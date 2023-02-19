@@ -18,7 +18,7 @@ android {
         exclude("META-INF/*.kotlin_module")
     }
 
-        defaultConfig {
+    defaultConfig {
         applicationId "com.example.hakone"
         minSdk 26
         targetSdk 32

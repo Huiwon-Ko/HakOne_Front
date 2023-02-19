@@ -77,6 +77,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         if (gsa != null && gsa.getId() != null) {
                 //이 경우 로그인 성공
             Toast.makeText(this, "이미 로그인 함", Toast.LENGTH_SHORT).show();
+
         }
     }
 
@@ -95,37 +96,36 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 String personId = acct.getId();
                 Uri personPhoto = acct.getPhotoUrl();
 
-                Log.d(TAG, "handleSignInResult:personName "+personName);
-                Log.d(TAG, "handleSignInResult:personGivenName "+personGivenName);
-                Log.d(TAG, "handleSignInResult:personEmail "+personEmail);
-                Log.d(TAG, "handleSignInResult:personId "+personId);
-                Log.d(TAG, "handleSignInResult:personFamilyName "+personFamilyName);
-                Log.d(TAG, "handleSignInResult:personPhoto "+personPhoto);
-
-
+                Log.d(TAG, "handleSignInResult:personName " + personName);
+                Log.d(TAG, "handleSignInResult:personGivenName " + personGivenName);
+                Log.d(TAG, "handleSignInResult:personEmail " + personEmail);
+                Log.d(TAG, "handleSignInResult:personId " + personId);
+                Log.d(TAG, "handleSignInResult:personFamilyName " + personFamilyName);
+                Log.d(TAG, "handleSignInResult:personPhoto " + personPhoto);
 
 
                 // TODO(developer): send ID Token to server and validate
+
                 //추가한 부분
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin"); //추후 수정 필요
+                new Thread(() -> {
+                    HttpClient httpClient = new DefaultHttpClient();
+                    HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin"); //추후 수정 필요
 
-                try {
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                    nameValuePairs.add(new BasicNameValuePair("idToken", idToken));
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                    try {
+                        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                        nameValuePairs.add(new BasicNameValuePair("idToken", idToken));
+                        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-                    HttpResponse response = httpClient.execute(httpPost);
-                    int statusCode = response.getStatusLine().getStatusCode();
-                    final String responseBody = EntityUtils.toString(response.getEntity());
-                    Log.i(TAG, "Signed in as: " + responseBody);
-                } catch (ClientProtocolException e) {
-                    Log.e(TAG, "Error sending ID token to backend.", e);
-                } catch (IOException e) {
-                    Log.e(TAG, "Error sending ID token to backend.", e);
-                }
-                //
-
+                        HttpResponse response = httpClient.execute(httpPost);
+                        int statusCode = response.getStatusLine().getStatusCode();
+                        final String responseBody = EntityUtils.toString(response.getEntity());
+                        Log.i(TAG, "Signed in as: " + responseBody);
+                    } catch (ClientProtocolException e) {
+                        Log.e(TAG, "Error sending ID token to backend.", e);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error sending ID token to backend.", e);
+                    }
+                }).start();
             }
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -133,9 +133,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             Log.e(TAG, "signInResult:failed code=" + e.getStatusCode());
 
             //updateUI(null);
-
         }
     }
+
+
 
 
     @Override  //활동의 onClick 메서드에서 getSignInIntent 메서드로 로그인 인텐트를 만들고 startActivityForResult로 인텐트를 시작하여 로그인 버튼 탭을 처리
@@ -144,17 +145,18 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.btn_googleLogin: //로그인 버튼
                 signIn();
                 break;
-            /*
+
             case R.id.logoutBt: //로그아웃 버튼
                 mGoogleSignInClient.signOut()
                         .addOnCompleteListener(this, task -> {
                             Log.d(TAG, "onClick:logout success ");
                             mGoogleSignInClient.revokeAccess()
                                     .addOnCompleteListener(this, task1 -> Log.d(TAG, "onClick:revokeAccess success "));
-
+                                    //홈 화면으로 이동
                         });
                 break;
-            */
+
+
         }
     }
 
@@ -185,24 +187,29 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                 //추가
                 // TODO(developer): send code to server and exchange for access/refresh/ID tokens
-                HttpPost httpPost = new HttpPost("https://yourbackend.example.com/authcode");
-                HttpClient httpClient = new DefaultHttpClient();
 
-                try {
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                    nameValuePairs.add(new BasicNameValuePair("authCode", authCode));
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                new Thread(() -> {
+                    HttpPost httpPost = new HttpPost("http://localhost:8080/google/login");
+                    HttpClient httpClient = new DefaultHttpClient();
+                    try {
+                        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                            nameValuePairs.add(new BasicNameValuePair("authCode", authCode));
+                            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-                    HttpResponse response = httpClient.execute(httpPost);
 
-                    int statusCode = response.getStatusLine().getStatusCode();
-                    final String responseBody = EntityUtils.toString(response.getEntity());
+                            HttpResponse response = httpClient.execute(httpPost);
 
-                } catch (ClientProtocolException e) {
-                    Log.e(TAG, "Error sending auth code to backend.", e);
-                } catch (IOException e) {
-                    Log.e(TAG, "Error sending auth code to backend.", e);
-                }
+
+                            int statusCode = response.getStatusLine().getStatusCode();
+                            final String responseBody = EntityUtils.toString(response.getEntity());
+
+
+                    } catch (ClientProtocolException e) {
+                        Log.e(TAG, "Error sending auth code to backend.", e);
+                    } catch (IOException e) {
+                        Log.e(TAG, "Error sending auth code to backend.", e);
+                    }
+                }).start();
 
 
 
