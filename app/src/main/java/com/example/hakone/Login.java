@@ -81,62 +81,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         }
     }
 
-    //GoogleSignIn.getLastSignedInAccount 메서드를 사용하여 현재 로그인한 사용자의 프로필 정보를 요청
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
-            String idToken = acct.getIdToken(); //추가한 부분
-
-
-            if (acct != null) {
-                String personName = acct.getDisplayName();
-                String personGivenName = acct.getGivenName(); //
-                String personFamilyName = acct.getFamilyName(); //
-                String personEmail = acct.getEmail();
-                String personId = acct.getId();
-                Uri personPhoto = acct.getPhotoUrl();
-
-                Log.d(TAG, "handleSignInResult:personName " + personName);
-                Log.d(TAG, "handleSignInResult:personGivenName " + personGivenName);
-                Log.d(TAG, "handleSignInResult:personEmail " + personEmail);
-                Log.d(TAG, "handleSignInResult:personId " + personId);
-                Log.d(TAG, "handleSignInResult:personFamilyName " + personFamilyName);
-                Log.d(TAG, "handleSignInResult:personPhoto " + personPhoto);
-
-
-                // TODO(developer): send ID Token to server and validate
-
-                //추가한 부분
-                new Thread(() -> {
-                    HttpClient httpClient = new DefaultHttpClient();
-                    HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin"); //추후 수정 필요
-
-                    try {
-                        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                        nameValuePairs.add(new BasicNameValuePair("idToken", idToken));
-                        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                        HttpResponse response = httpClient.execute(httpPost);
-                        int statusCode = response.getStatusLine().getStatusCode();
-                        final String responseBody = EntityUtils.toString(response.getEntity());
-                        Log.i(TAG, "Signed in as: " + responseBody);
-                    } catch (ClientProtocolException e) {
-                        Log.e(TAG, "Error sending ID token to backend.", e);
-                    } catch (IOException e) {
-                        Log.e(TAG, "Error sending ID token to backend.", e);
-                    }
-                }).start();
-            }
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.e(TAG, "signInResult:failed code=" + e.getStatusCode());
-
-            //updateUI(null);
-        }
-    }
-
-
 
 
     @Override  //활동의 onClick 메서드에서 getSignInIntent 메서드로 로그인 인텐트를 만들고 startActivityForResult로 인텐트를 시작하여 로그인 버튼 탭을 처리
@@ -145,7 +89,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.btn_googleLogin: //로그인 버튼
                 signIn();
                 break;
-
+/*
             case R.id.logoutBt: //로그아웃 버튼
                 mGoogleSignInClient.signOut()
                         .addOnCompleteListener(this, task -> {
@@ -154,7 +98,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                     .addOnCompleteListener(this, task1 -> Log.d(TAG, "onClick:revokeAccess success "));
                                     //홈 화면으로 이동
                         });
-                break;
+                break; */
 
 
         }
@@ -189,19 +133,20 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 // TODO(developer): send code to server and exchange for access/refresh/ID tokens
 
                 new Thread(() -> {
-                    HttpPost httpPost = new HttpPost("http://localhost:8080/google/login");
+                    HttpPost httpPost = new HttpPost("http:// 172.30.1.72 :8080/google");
                     HttpClient httpClient = new DefaultHttpClient();
                     try {
                         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
                             nameValuePairs.add(new BasicNameValuePair("authCode", authCode));
                             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-
                             HttpResponse response = httpClient.execute(httpPost);
 
-
-                            int statusCode = response.getStatusLine().getStatusCode();
+                            int statusCode = response.getStatusLine().getStatusCode(); //잘 갔다면 200이 저장됨.
                             final String responseBody = EntityUtils.toString(response.getEntity());
+
+                            // responseBody 이 부분에 담겨있는게 token DTO
+                            // 위에 저장을 빼고 받아온 걸로 저장해야 함.
 
 
                     } catch (ClientProtocolException e) {
@@ -217,7 +162,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 Log.w(TAG, "Sign-in failed", e);
                 //updateUI(null);
             }
-            handleSignInResult(task);
+
 
 
         }

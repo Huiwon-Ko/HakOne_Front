@@ -29,59 +29,36 @@
         app:layout_constraintVertical_bias="0.647" />
 
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_begin="231dp" />
-
     <LinearLayout
-        android:layout_width="410dp"
-        android:layout_height="502dp"
+        android:layout_width="416dp"
+        android:layout_height="450dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomNavi"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profile"
+        app:layout_constraintVertical_bias="1.0">
 
-        <TextView
-            android:id="@+id/change_profile"
+        <ListView
+            android:id="@+id/mypage_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="개인정보 수정"
-            android:textSize="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.185"
-            app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="283dp" />
+            android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/my_review"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:text="내가 작성한 리뷰"
-            android:textSize="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.218"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/change_profile" />
-
-        <Button
-            android:id="@+id/logoutBt"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="로그아웃" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
+        </ListView>
 
     </LinearLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavi"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:itemIconTint="#000000"
+        app:itemTextColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/bottom_menu"
+        tools:layout_editor_absoluteX="8dp"
+        android:layout_alignParentBottom="true" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
