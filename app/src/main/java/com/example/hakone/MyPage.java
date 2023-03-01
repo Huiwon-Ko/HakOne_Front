@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
@@ -57,6 +58,15 @@ public class MyPage extends AppCompatActivity {
                 {
                     Intent intent = new Intent(MyPage.this, MyReview.class);
                     startActivity(intent);
+                }
+                if (position==2)
+                {
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MyPage.this);
+                    builder.setTitle("로그아웃");
+                    builder.setMessage("정말 로그아웃 하시겠습니까?");
+                    builder.setPositiveButton("예", null);
+                    builder.setNegativeButton("취소", null);
+                    builder.create().show();
                 }
             }
         });

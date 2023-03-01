@@ -32,10 +32,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONException;
-import org.json.JSONObject;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -137,7 +137,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 // TODO(developer): send code to server and exchange for access/refresh/ID tokens
 
                 new Thread(() -> {
-                    HttpPost httpPost = new HttpPost("http:// 172.30.1.72 :8080/google");
+                    HttpPost httpPost = new HttpPost("http://172.30.1.72:8080/google");
                     HttpClient httpClient = new DefaultHttpClient();
                     try {
                         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
@@ -153,7 +153,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         // 위에 저장을 빼고 받아온 걸로 저장해야 함.
 
                         JSONParser parser = new JSONParser();
-                        Object obj = parser.parse( responseBody );
+                        Object obj = parser.parse(responseBody);
                         JSONObject jsonObj = (JSONObject) obj;
                         String token = (String) jsonObj.get("token");
                         String name = (String) jsonObj.get("name");
@@ -169,12 +169,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                     } catch (ClientProtocolException e) {
                         Log.e(TAG, "Error sending auth code to backend.", e);
-                    } catch (IOException e) {
+                    } catch (IOException | ParseException e) {
                         Log.e(TAG, "Error sending auth code to backend.", e);
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
                     }
                 }).start();
 

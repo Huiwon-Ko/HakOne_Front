@@ -47,7 +47,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.ext:junit:4.13.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
     implementation 'com.google.android.gms:play-services-auth:20.4.1' //구글 연동
     implementation 'com.github.bumptech.glide:glide:4.9.0' //글라이드 이미지 로딩(프로필 이미지 잘 가져오기 위함)
@@ -61,4 +61,9 @@ dependencies {
 
     api 'com.github.ok2c.hc4.android:httpclient-android:0.1.0'
 
+}
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module('org.hamcrest:hamcrest-core:1.1') with module('junit:junit:4.10')
+    }
 }
