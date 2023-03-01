@@ -32,6 +32,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -137,22 +141,40 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                     HttpClient httpClient = new DefaultHttpClient();
                     try {
                         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                            nameValuePairs.add(new BasicNameValuePair("authCode", authCode));
-                            httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                        nameValuePairs.add(new BasicNameValuePair("authCode", authCode));
+                        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-                            HttpResponse response = httpClient.execute(httpPost);
+                        HttpResponse response = httpClient.execute(httpPost);
 
-                            int statusCode = response.getStatusLine().getStatusCode(); //잘 갔다면 200이 저장됨.
-                            final String responseBody = EntityUtils.toString(response.getEntity());
+                        int statusCode = response.getStatusLine().getStatusCode(); //잘 갔다면 200이 저장됨.
+                        final String responseBody = EntityUtils.toString(response.getEntity());
 
-                            // responseBody 이 부분에 담겨있는게 token DTO
-                            // 위에 저장을 빼고 받아온 걸로 저장해야 함.
+                        // responseBody 이 부분에 담겨있는게 token DTO
+                        // 위에 저장을 빼고 받아온 걸로 저장해야 함.
+
+                        JSONParser parser = new JSONParser();
+                        Object obj = parser.parse( responseBody );
+                        JSONObject jsonObj = (JSONObject) obj;
+                        String token = (String) jsonObj.get("token");
+                        String name = (String) jsonObj.get("name");
+                        String email = (String) jsonObj.get("email");
+                        String profile_pic = (String) jsonObj.get("profile_pic");
+
+                        Log.d(TAG, "받아온 결과 token:" +token);
+                        Log.d(TAG, "받아온 결과 name:" +name);
+                        Log.d(TAG, "받아온 결과 email:" +email);
+                        Log.d(TAG, "받아온 결과 profile_pic:" +profile_pic);
+
 
 
                     } catch (ClientProtocolException e) {
                         Log.e(TAG, "Error sending auth code to backend.", e);
                     } catch (IOException e) {
                         Log.e(TAG, "Error sending auth code to backend.", e);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 }).start();
 
