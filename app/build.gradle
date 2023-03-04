@@ -61,6 +61,13 @@ dependencies {
 
     api 'com.github.ok2c.hc4.android:httpclient-android:0.1.0'
 
+    // retrofit
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+
+    // recyclerview
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
 }
 configurations.all {
     resolutionStrategy.dependencySubstitution {

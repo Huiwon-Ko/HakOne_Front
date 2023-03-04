@@ -30,8 +30,9 @@
 
 
     <LinearLayout
-        android:layout_width="416dp"
-        android:layout_height="450dp"
+        android:id="@+id/linearLayout"
+        android:layout_width="440dp"
+        android:layout_height="370dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavi"
         app:layout_constraintEnd_toEndOf="parent"
@@ -44,6 +45,7 @@
             android:id="@+id/mypage_list"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
 
         </ListView>
 
@@ -59,6 +61,16 @@
         app:menu="@menu/bottom_menu"
         tools:layout_editor_absoluteX="8dp"
         android:layout_alignParentBottom="true" />
+
+    <Button
+        android:id="@+id/logoutBt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="로그아웃"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/profile"
+        app:layout_constraintVertical_bias="0.54"
+        tools:layout_editor_absoluteX="37dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

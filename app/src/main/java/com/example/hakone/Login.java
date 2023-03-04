@@ -1,5 +1,6 @@
 package com.example.hakone;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -20,6 +21,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 
@@ -81,6 +83,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         if (gsa != null && gsa.getId() != null) {
                 //이 경우 로그인 성공
             Toast.makeText(this, "이미 로그인 함", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(getApplicationContext(), Home.class));
 
         }
     }
@@ -93,17 +96,10 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.btn_googleLogin: //로그인 버튼
                 signIn();
                 break;
-/*
-            case R.id.logoutBt: //로그아웃 버튼
-                mGoogleSignInClient.signOut()
-                        .addOnCompleteListener(this, task -> {
-                            Log.d(TAG, "onClick:logout success ");
-                            mGoogleSignInClient.revokeAccess()
-                                    .addOnCompleteListener(this, task1 -> Log.d(TAG, "onClick:revokeAccess success "));
-                                    //홈 화면으로 이동
-                        });
-                break; */
 
+            case R.id.logoutBt: //로그아웃 버튼
+                signOut();
+                break;
 
         }
     }
@@ -111,6 +107,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        startActivity(new Intent(getApplicationContext(), Login.class));
+                    }
+                });
     }
 
     @Override

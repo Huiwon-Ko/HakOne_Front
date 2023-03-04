@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="100"
+    android:padding="5dp">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"
+        android:layout_gravity="center"
+        android:background="#F2F8EB"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="2.5"
+            android:background="#A5E4DF"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/HakOne_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center|left"
+                android:text="학원 이름" />
+
+            <ImageButton
+                android:id="@+id/Call"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:enabled="true"
+                android:icon="@drawable/ic_baseline_local_phone_24"
+                android:title="star"/>
+
+            <ImageButton
+                android:id="@+id/Interest"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:enabled="true"
+                android:icon="@drawable/ic_baseline_star_outline_24"
+                android:title="star"/>
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_postlist_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center|left"
+            android:text="Content" />
+    </LinearLayout>
+
+</LinearLayout>
