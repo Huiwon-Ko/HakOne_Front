@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Credentials;
 import android.net.Uri;
 import android.nfc.Tag;
@@ -53,11 +54,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private final int RC_SIGN_IN = 123;
     private static final String TAG = "Login";
 
+    private SharedPreferences preferences;
+    public long user_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) { //앱이 실행될 떄 처음 수행되는 곳
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         btn_google = findViewById(R.id.btn_googleLogin);
         btn_google.setOnClickListener(this);
@@ -100,7 +105,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.logoutBt: //로그아웃 버튼
                 signOut();
                 break;
-
         }
     }
 
@@ -161,11 +165,17 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         JSONParser parser = new JSONParser();
                         Object obj = parser.parse(responseBody);
                         JSONObject jsonObj = (JSONObject) obj;
+
+                        //User id
+                        Long user_id = (Long) jsonObj.get("user_id");
+
                         String token = (String) jsonObj.get("token");
                         String name = (String) jsonObj.get("name");
                         String email = (String) jsonObj.get("email");
                         String profile_pic = (String) jsonObj.get("profile_pic");
 
+
+                        Log.d(TAG, "받아온 결과 user_id:" +user_id);
                         Log.d(TAG, "받아온 결과 token:" +token);
                         Log.d(TAG, "받아온 결과 name:" +name);
                         Log.d(TAG, "받아온 결과 email:" +email);

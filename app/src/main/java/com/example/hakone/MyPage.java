@@ -9,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -26,6 +27,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class MyPage extends AppCompatActivity {
 
@@ -36,6 +40,10 @@ public class MyPage extends AppCompatActivity {
     GoogleSignInClient mGoogleSignInClient;
     GoogleSignInOptions gOptions;
     GoogleSignInClient gClient;
+
+    Login login = new Login();
+
+    long userId = login.user_id;
 
 
 
@@ -98,15 +106,28 @@ public class MyPage extends AppCompatActivity {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MyPage.this);
                     builder.setTitle("회원탈퇴");
                     builder.setMessage("정말 회원탈퇴 하시겠습니까?");
-                    /*
+
                     builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            Call<Void> call = jsonPlaceHolderApi.deletePost()
+                        public void onClick(DialogInterface dialogInterface, int which){
+                            Call<Void> call = ApiClient.getClient().create(ApiInterface.class).deleteUser(userId);
+
+                            call.enqueue(new Callback<Void>() {
+                                @Override
+                                public void onResponse(Call<Void> call, Response<Void> response) {
+                                    finish();
+                                    startActivity(new Intent(MyPage.this, Login.class));
+                                    Toast.makeText(MyPage.this, "탈퇴 되었습니다.", Toast.LENGTH_SHORT).show();
+                                }
+
+                                @Override
+                                public void onFailure(Call<Void> call, Throwable t) {
+
+                                }
+                            });
                         }
                     });
 
-                     */
+
                     builder.setNegativeButton("취소", null);
                     builder.create().show();
                 }

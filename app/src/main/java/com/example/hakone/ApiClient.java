@@ -4,12 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.util.List;
+
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ApiClient extends AppCompatActivity {
 
-    public static String BASE_URL = "http://172.30.1.72:8080/";
+    public static String BASE_URL = "http://ec2-52-79-55-255.ap-northeast-2.compute.amazonaws.com:8080/";
 
     private static Retrofit retrofit;
     public static Retrofit getClient(){
@@ -21,12 +23,8 @@ public class ApiClient extends AppCompatActivity {
                     .build();
         }
         return retrofit;
-    }
-/*
-    public class HakOneList{ //데이터 가져올 클래스
-        @SerializedName("key")
-        public string key; //이 과정 반복    } */
-}
+    }}
+
 
 
 
