@@ -147,7 +147,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 // TODO(developer): send code to server and exchange for access/refresh/ID tokens
 
                 new Thread(() -> {
-                    HttpPost httpPost = new HttpPost("http://172.30.1.72:8080/google");
+                    HttpPost httpPost = new HttpPost("http://ec2-52-79-55-255.ap-northeast-2.compute.amazonaws.com:8080/google");
                     HttpClient httpClient = new DefaultHttpClient();
                     try {
                         List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
