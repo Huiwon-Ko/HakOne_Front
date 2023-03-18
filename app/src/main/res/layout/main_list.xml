@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:weightSum="100"
     android:padding="5dp">
 
     <LinearLayout
@@ -17,8 +15,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2"
+            android:layout_height="50dp"
             android:background="#A5E4DF"
             android:orientation="horizontal">
 
@@ -26,28 +23,30 @@
                 android:id="@+id/HakOne_name"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="3dp"
                 android:gravity="center|left"
+                android:layout_weight="1"
+                android:padding="10dp"
                 android:text="학원 이름" />
 
             <ImageButton
                 android:id="@+id/Call"
-                android:layout_width="wrap_content"
+                android:layout_width="48dp"
                 android:layout_height="match_parent"
+                android:layout_weight="0"
                 android:enabled="true"
-                android:layout_weight="0.1"
-                android:icon="@drawable/ic_baseline_local_phone_24"
-                android:contentDescription="Call"/>
+                android:contentDescription="Call"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_baseline_local_phone_24" />
 
             <ImageButton
                 android:id="@+id/Interest"
-                android:layout_width="wrap_content"
+                android:layout_width="48dp"
                 android:layout_height="match_parent"
-                android:layout_weight="0.1"
-                android:contentDescription="Interest"
+                android:layout_weight="0"
                 android:enabled="true"
-                android:icon="@drawable/ic_baseline_star_outline_24" />
+                android:contentDescription="Interest"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_baseline_star_outline_24" />
 
 
         </LinearLayout>
@@ -55,68 +54,73 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="2.5"
+            android:layout_height="33dp"
+            android:layout_weight="0"
             android:background="#85B5B8"
             android:padding="3dp"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/subject1"
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="match_parent"
-                android:text="subject1"
+                android:text="sub1"
+                android:gravity="center"
                 android:background="@drawable/border"
+                android:layout_marginLeft="3dp"
                 android:layout_marginRight="3dp"
-                android:padding="4dp" />
+                android:padding="5dp" />
             <TextView
                 android:id="@+id/subject2"
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="match_parent"
-                android:text="subject2"
+                android:text="sub2"
+                android:gravity="center"
                 android:background="@drawable/border"
                 android:layout_marginRight="3dp"
-                android:padding="4dp" />
+                android:padding="5dp" />
             <TextView
                 android:id="@+id/subject3"
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="match_parent"
-                android:text="subject3"
+                android:text="sub3"
+                android:gravity="center"
                 android:background="@drawable/border"
                 android:layout_marginRight="3dp"
-                android:padding="4dp" />
+                android:padding="5dp" />
             <TextView
                 android:id="@+id/subject4"
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="match_parent"
-                android:text="subject4"
+                android:text="sub4"
+                android:gravity="center"
                 android:background="@drawable/border"
                 android:layout_marginRight="3dp"
-                android:padding="4dp" />
+                android:padding="5dp" />
             <TextView
                 android:id="@+id/subject5"
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="match_parent"
-                android:text="subject5"
+                android:text="sub5"
+                android:gravity="center"
                 android:background="@drawable/border"
                 android:layout_marginRight="3dp"
-                android:padding="4dp" />
+                android:padding="5dp" />
             <TextView
                 android:id="@+id/subject6"
-                android:layout_width="wrap_content"
+                android:layout_width="55dp"
                 android:layout_height="match_parent"
-                android:text="subject6"
+                android:text="sub6"
+                android:gravity="center"
                 android:background="@drawable/border"
-                android:padding="4dp" />
-
-
+                android:padding="5dp" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_weight="2.2"
+            android:layout_weight="0"
             android:orientation="horizontal">
 
             <ImageView
@@ -130,7 +134,7 @@
                 android:id="@+id/review_point"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.01"
+                android:layout_weight="0"
                 android:gravity="center|left"
                 android:text="리뷰 점수" />
 
@@ -138,17 +142,23 @@
                 android:id="@+id/review_num"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0.01"
+                android:layout_weight="0"
                 android:gravity="center|left"
                 android:text="리뷰 개수" />
 
             <TextView
                 android:id="@+id/avgTuition"
-                android:layout_width="wrap_content"
+                android:layout_width="190dp"
                 android:layout_height="match_parent"
-                android:layout_weight="1"
                 android:gravity="center|right"
                 android:text="월 평균 학원비" />
+
+            <TextView
+                android:layout_width="18dp"
+                android:layout_height="match_parent"
+                android:gravity="center|right"
+                android:layout_marginRight="7dp"
+                android:text="원" />
 
         </LinearLayout>
 
