@@ -24,8 +24,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,27 +38,46 @@ public class Home extends AppCompatActivity {
 
     long userId = login.user_id;
 
+    RecyclerView recyclerView; // 리사이클러뷰 객체 선언
+    RecyclerAdapter adapter; // 어댑터 객체 선언
+    List<HakOneList> hakOneList = new ArrayList<>(); // 데이터 리스트
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        recyclerView = findViewById(R.id.recyclerView); // 리사이클러뷰 뷰 ID 연결
+
+        // 리사이클러뷰 레이아웃 매니저 설정
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        // 어댑터 객체 생성 및 리사이클러뷰에 연결
+        adapter = new RecyclerAdapter(hakOneList);
+        recyclerView.setAdapter(adapter);
+
+
         //새 스레드로
         new Thread(new Runnable() {
             @Override
             public void run() {
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                Call<List<HakOneList>> call = apiInterface.getData(userId);
+                Call<ResponseBody> call = apiInterface.getData();
+
 
                 try {
-                    Response<List<HakOneList>> response = call.execute();
+                    Response<ResponseBody> response = call.execute();
+
 
                     if (response.isSuccessful()) {
 
                         // InputStream 얻기
-                        ResponseBody responseBody = response.raw().body();
-                        InputStream inputStream = responseBody.byteStream();
+                        InputStream inputStream = response.body().byteStream();
+
+                        Log.d("TAG", inputStream.toString());
+
 
                         // 버퍼 생성
                         byte[] buffer = new byte[inputStream.available()];
@@ -68,11 +89,13 @@ public class Home extends AppCompatActivity {
                             sb.append(new String(buffer, 0, bytesRead));
                         }
 
+
                         // JSON 데이터 파싱
                         String json = sb.toString();
                         JSONArray jsonArray = new JSONArray(json);
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
+
                             // 필요한 데이터 추출
                             int academyId = jsonObject.getInt("academyId");
                             String academyName = jsonObject.getString("academyName");
@@ -101,8 +124,20 @@ public class Home extends AppCompatActivity {
 
 
                             boolean isStar = jsonObject.getBoolean("star");
+                            //int review_count = jsonObject.getInt("review_count");
+
+                            HakOneList hakOne = new HakOneList(academyName, avgTuition);
+                            hakOneList.add(hakOne);
+
                             // ...
                         }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
 
                         // InputStream 닫기
                         inputStream.close();
@@ -114,83 +149,10 @@ public class Home extends AppCompatActivity {
 
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
+                    Log.e("TAG", "서버 연결 오류: " + e.getMessage());
                 }
             }
         }).start();
-/*
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<List<HakOneList>> call = apiInterface.getData(userId);
-
-        // 동기적으로 호출하기
-        try {
-            Response<List<HakOneList>> response = call.execute();
-
-            if (response.isSuccessful()) {
-
-                // InputStream 얻기
-                ResponseBody responseBody = response.raw().body();
-                InputStream inputStream = responseBody.byteStream();
-
-                // 버퍼 생성
-                byte[] buffer = new byte[inputStream.available()];
-                int bytesRead;
-                StringBuilder sb = new StringBuilder();
-
-                // 버퍼를 사용하여 데이터를 읽기
-                while ((bytesRead = inputStream.read(buffer)) != -1) {
-                    sb.append(new String(buffer, 0, bytesRead));
-                }
-
-                // JSON 데이터 파싱
-                String json = sb.toString();
-                JSONArray jsonArray = new JSONArray(json);
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-                    // 필요한 데이터 추출
-                    int academyId = jsonObject.getInt("academyId");
-                    String academyName = jsonObject.getString("academyName");
-                    String region = jsonObject.getString("region");
-                    String tel = jsonObject.getString("tel");
-                    int avgTuition = jsonObject.getInt("avgTuition");
-
-                    // gradeList 파싱
-                    JSONArray gradeListArray = jsonObject.getJSONArray("gradeList");
-                    boolean elementary = gradeListArray.getBoolean(0);
-                    boolean middle = gradeListArray.getBoolean(1);
-                    boolean high = gradeListArray.getBoolean(2);
-                    boolean grace_etc = gradeListArray.getBoolean(3);
-
-                    // subjectList 파싱
-                    JSONArray subjectListArray = jsonObject.getJSONArray("subjectList");
-                    boolean korean = subjectListArray.getBoolean(0);
-                    boolean english = subjectListArray.getBoolean(1);
-                    boolean math = subjectListArray.getBoolean(2);
-                    boolean social = subjectListArray.getBoolean(3);
-                    boolean science = subjectListArray.getBoolean(4);
-                    boolean foreign = subjectListArray.getBoolean(5);
-                    boolean essay = subjectListArray.getBoolean(6);
-                    boolean art = subjectListArray.getBoolean(7);
-                    boolean sub_etc = subjectListArray.getBoolean(8);
-
-
-                    boolean isStar = jsonObject.getBoolean("star");
-                    // ...
-                }
-
-                // InputStream 닫기
-                inputStream.close();
-            } else {
-                // 실패 처리
-            }
-
-
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-        }
-
-
- */
-
 
 
         bottomNavigationView = findViewById(R.id.bottomNavi);

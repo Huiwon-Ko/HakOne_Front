@@ -30,8 +30,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         HakOneList hakone = hakOneList.get(position);
-        holder.academyName.setText(hakone.getAcademyName());
-        holder.avgTuition.setText(Integer.toString(hakone.getAvgTuition()));
+        holder.bind(hakone);
     }
 
 
@@ -47,8 +46,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
-            academyName = (TextView) itemView.findViewById(R.id.HakOne_name);
-            avgTuition = (TextView) itemView.findViewById(R.id.avgTuition);
+            academyName = itemView.findViewById(R.id.HakOne_name);
+            avgTuition = itemView.findViewById(R.id.avgTuition);
 
         }
         void bind(HakOneList hakone) {
@@ -57,5 +56,4 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         }
 
     }
-
 }
