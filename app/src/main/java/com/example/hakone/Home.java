@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 
 import okhttp3.ResponseBody;
@@ -17,6 +18,11 @@ import retrofit2.Response;
 
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.TableLayout;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -42,21 +48,17 @@ public class Home extends AppCompatActivity {
     RecyclerAdapter adapter; // 어댑터 객체 선언
     List<HakOneList> hakOneList = new ArrayList<>(); // 데이터 리스트
 
+    public static ArrayList<String> subjects;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         recyclerView = findViewById(R.id.recyclerView); // 리사이클러뷰 뷰 ID 연결
 
-        // 리사이클러뷰 레이아웃 매니저 설정
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-        // 어댑터 객체 생성 및 리사이클러뷰에 연결
-        adapter = new RecyclerAdapter(hakOneList);
-        recyclerView.setAdapter(adapter);
+        hakOneList = new ArrayList<>(); //hakOneList 객체 초기화
 
 
         //새 스레드로
@@ -93,7 +95,10 @@ public class Home extends AppCompatActivity {
                         // JSON 데이터 파싱
                         String json = sb.toString();
                         JSONArray jsonArray = new JSONArray(json);
+
+
                         for (int i = 0; i < jsonArray.length(); i++) {
+                            subjects = new ArrayList<>();
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
 
                             // 필요한 데이터 추출
@@ -122,11 +127,25 @@ public class Home extends AppCompatActivity {
                             boolean art = subjectListArray.getBoolean(7);
                             boolean sub_etc = subjectListArray.getBoolean(8);
 
+                            if (subjectListArray.getBoolean(0)) subjects.add("국어");
+                            if (subjectListArray.getBoolean(1)) subjects.add("영어");
+                            if (subjectListArray.getBoolean(2)) subjects.add("수학");
+                            if (subjectListArray.getBoolean(3)) subjects.add("사회");
+                            if (subjectListArray.getBoolean(4)) subjects.add("과학");
+                            if (subjectListArray.getBoolean(5)) subjects.add("외국어");
+                            if (subjectListArray.getBoolean(6)) subjects.add("논술");
+                            if (subjectListArray.getBoolean(7)) subjects.add("미술");
+                            if (subjectListArray.getBoolean(8)) subjects.add("기타");
+
+                            Log.d("TAG", subjects.toString());
+
+
+
 
                             boolean isStar = jsonObject.getBoolean("star");
                             //int review_count = jsonObject.getInt("review_count");
 
-                            HakOneList hakOne = new HakOneList(academyName, avgTuition);
+                            HakOneList hakOne = new HakOneList(academyName, avgTuition, subjects);
                             hakOneList.add(hakOne);
 
                             // ...
@@ -153,6 +172,14 @@ public class Home extends AppCompatActivity {
                 }
             }
         }).start();
+
+        // 리사이클러뷰 레이아웃 매니저 설정
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        // 어댑터 객체 생성 및 리사이클러뷰에 연결
+        adapter = new RecyclerAdapter(hakOneList, this, subjects);
+        recyclerView.setAdapter(adapter);
 
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
