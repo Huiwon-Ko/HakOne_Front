@@ -16,11 +16,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
 
@@ -48,7 +58,15 @@ public class Home extends AppCompatActivity {
     RecyclerAdapter adapter; // 어댑터 객체 선언
     List<HakOneList> hakOneList = new ArrayList<>(); // 데이터 리스트
 
+    private Spinner regionSpinner;
+
     public static ArrayList<String> subjects;
+
+    // 검색시 같은 이름이 있는 아이템이 담길 리스트
+    ArrayList<HakOneList> search_list = new ArrayList<>();
+    // recyclerView에 추가할 아이템 리스트
+    ArrayList<HakOneList> original_list = new ArrayList<>();
+    EditText editText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +78,38 @@ public class Home extends AppCompatActivity {
 
         hakOneList = new ArrayList<>(); //hakOneList 객체 초기화
 
+        EditText editText = findViewById(R.id.editText);
+        editText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                filter(editable.toString());
+            }
+        });
+
+        regionSpinner = (Spinner)findViewById(R.id.regionSpinner);
+
+        regionSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
 
         //새 스레드로
         new Thread(new Runnable() {
@@ -67,6 +117,8 @@ public class Home extends AppCompatActivity {
             public void run() {
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
                 Call<ResponseBody> call = apiInterface.getData();
+
+                //Call<ResponseBody> call = apiInterface.postStarAcademy(userId, academyId);
 
 
                 try {
@@ -145,7 +197,7 @@ public class Home extends AppCompatActivity {
                             boolean isStar = jsonObject.getBoolean("star");
                             //int review_count = jsonObject.getInt("review_count");
 
-                            HakOneList hakOne = new HakOneList(academyName, avgTuition, subjects);
+                            HakOneList hakOne = new HakOneList(academyName, avgTuition, region, subjects);
                             hakOneList.add(hakOne);
 
                             // ...
@@ -172,6 +224,8 @@ public class Home extends AppCompatActivity {
                 }
             }
         }).start();
+
+
 
         // 리사이클러뷰 레이아웃 매니저 설정
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -207,5 +261,18 @@ public class Home extends AppCompatActivity {
             }
         });
     }
+
+
+    private void filter(String text){
+        ArrayList<HakOneList> filteredList = new ArrayList<>();
+
+        for (HakOneList item : hakOneList) {
+            if(item.getAcademyName().toLowerCase().contains(text.toLowerCase())){
+                filteredList.add(item);
+            }
+        }
+        adapter.filterList(filteredList);
+    }
+
 }
 

@@ -45,9 +45,6 @@ public class MyPage extends AppCompatActivity {
 
     long userId = login.user_id;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,7 +123,6 @@ public class MyPage extends AppCompatActivity {
                             });
                         }
                     });
-
 
                     builder.setNegativeButton("취소", null);
                     builder.create().show();
