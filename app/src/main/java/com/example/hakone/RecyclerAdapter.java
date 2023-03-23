@@ -4,7 +4,10 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,20 +18,22 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder> {
+public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>{
 
     private List<HakOneList> hakOneList;
     private List<HakOneList> hakOneListFull;
+    private List<HakOneList> regionList; //지역 필터링 된 것들 넣어줄 것.
 
     private Context context;
     private List<String> subjects;
+
 
     public RecyclerAdapter(List<HakOneList> hakOneList, Context context, List<String> subjects){
         this.hakOneList = hakOneList;
         this.context = context;
         this.subjects = subjects;
-
-        hakOneListFull = new ArrayList<>(hakOneList); //같은 내용을 담은 새로운 리스트 생성.
+        //hakOneListFull = new ArrayList<>(hakOneList); //같은 내용을 담은 새로운 리스트 생성.
+        hakOneListFull = new ArrayList<>(hakOneList);
 
     }
 
@@ -78,4 +83,23 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
 
         }
     }
+
+    public void filterList(ArrayList<HakOneList> filteredList) {
+        hakOneList = filteredList;
+        notifyDataSetChanged();
+    }
+
+
+
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        String selectedItem = parent.getItemAtPosition(position).toString();
+        regionList = new ArrayList<>();
+        for (HakOneList region : hakOneList) {
+            if (region.getRegion().equals(selectedItem)) {
+                regionList.add(region);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
 }

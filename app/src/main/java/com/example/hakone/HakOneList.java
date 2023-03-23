@@ -17,9 +17,12 @@ public class HakOneList {
     private int avgTuition;
     private List<String> subjects;
 
-    public HakOneList(String academyName, int avgTuition, List<String> subjects) {
+    private String region;
+
+    public HakOneList(String academyName, int avgTuition, String region, List<String> subjects) {
         this.academyName = academyName;
         this.avgTuition = avgTuition;
+        this.region = region;
         this.subjects = subjects;
     }
 
@@ -39,6 +42,14 @@ public class HakOneList {
         this.avgTuition = avgTuition;
     }
 
+    public String getRegion() {
+        return region;
+    }
+
+    public void setRegion(String region) {
+        this.region = region;
+    }
+
     public List<String> getSubjects() {
         return subjects;
     }
@@ -46,7 +57,6 @@ public class HakOneList {
     public void setSubjects(List<String> subjects) {
         this.subjects = subjects;
     }
-
 
 }
 
