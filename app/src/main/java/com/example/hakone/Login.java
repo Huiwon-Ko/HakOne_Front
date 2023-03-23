@@ -1,8 +1,10 @@
 package com.example.hakone;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Credentials;
 import android.net.Uri;
 import android.nfc.Tag;
@@ -20,6 +22,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.Scope;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 
@@ -32,6 +35,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -47,11 +54,15 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private final int RC_SIGN_IN = 123;
     private static final String TAG = "Login";
 
+    private SharedPreferences preferences;
+    public long user_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) { //앱이 실행될 떄 처음 수행되는 곳
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        preferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
 
         btn_google = findViewById(R.id.btn_googleLogin);
         btn_google.setOnClickListener(this);
@@ -77,65 +88,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         if (gsa != null && gsa.getId() != null) {
                 //이 경우 로그인 성공
             Toast.makeText(this, "이미 로그인 함", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    //GoogleSignIn.getLastSignedInAccount 메서드를 사용하여 현재 로그인한 사용자의 프로필 정보를 요청
-    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
-        try {
-            GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
-            String idToken = acct.getIdToken(); //추가한 부분
-
-
-            if (acct != null) {
-                String personName = acct.getDisplayName();
-                String personGivenName = acct.getGivenName(); //
-                String personFamilyName = acct.getFamilyName(); //
-                String personEmail = acct.getEmail();
-                String personId = acct.getId();
-                Uri personPhoto = acct.getPhotoUrl();
-
-                Log.d(TAG, "handleSignInResult:personName "+personName);
-                Log.d(TAG, "handleSignInResult:personGivenName "+personGivenName);
-                Log.d(TAG, "handleSignInResult:personEmail "+personEmail);
-                Log.d(TAG, "handleSignInResult:personId "+personId);
-                Log.d(TAG, "handleSignInResult:personFamilyName "+personFamilyName);
-                Log.d(TAG, "handleSignInResult:personPhoto "+personPhoto);
-
-
-
-
-                // TODO(developer): send ID Token to server and validate
-                //추가한 부분
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpPost httpPost = new HttpPost("https://yourbackend.example.com/tokensignin"); //추후 수정 필요
-
-                try {
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                    nameValuePairs.add(new BasicNameValuePair("idToken", idToken));
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
-
-                    HttpResponse response = httpClient.execute(httpPost);
-                    int statusCode = response.getStatusLine().getStatusCode();
-                    final String responseBody = EntityUtils.toString(response.getEntity());
-                    Log.i(TAG, "Signed in as: " + responseBody);
-                } catch (ClientProtocolException e) {
-                    Log.e(TAG, "Error sending ID token to backend.", e);
-                } catch (IOException e) {
-                    Log.e(TAG, "Error sending ID token to backend.", e);
-                }
-                //
-
-            }
-        } catch (ApiException e) {
-            // The ApiException status code indicates the detailed failure reason.
-            // Please refer to the GoogleSignInStatusCodes class reference for more information.
-            Log.e(TAG, "signInResult:failed code=" + e.getStatusCode());
-
-            //updateUI(null);
+            startActivity(new Intent(getApplicationContext(), Home.class));
 
         }
     }
+
 
 
     @Override  //활동의 onClick 메서드에서 getSignInIntent 메서드로 로그인 인텐트를 만들고 startActivityForResult로 인텐트를 시작하여 로그인 버튼 탭을 처리
@@ -144,23 +101,26 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             case R.id.btn_googleLogin: //로그인 버튼
                 signIn();
                 break;
-            /*
-            case R.id.logoutBt: //로그아웃 버튼
-                mGoogleSignInClient.signOut()
-                        .addOnCompleteListener(this, task -> {
-                            Log.d(TAG, "onClick:logout success ");
-                            mGoogleSignInClient.revokeAccess()
-                                    .addOnCompleteListener(this, task1 -> Log.d(TAG, "onClick:revokeAccess success "));
 
-                        });
+            case R.id.logoutBt: //로그아웃 버튼
+                signOut();
                 break;
-            */
         }
     }
 
     private void signIn() {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void signOut() {
+        mGoogleSignInClient.signOut()
+                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        startActivity(new Intent(getApplicationContext(), Login.class));
+                    }
+                });
     }
 
     @Override
@@ -185,24 +145,50 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                 //추가
                 // TODO(developer): send code to server and exchange for access/refresh/ID tokens
-                HttpPost httpPost = new HttpPost("https://yourbackend.example.com/authcode");
-                HttpClient httpClient = new DefaultHttpClient();
 
-                try {
-                    List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
-                    nameValuePairs.add(new BasicNameValuePair("authCode", authCode));
-                    httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+                new Thread(() -> {
+                    HttpPost httpPost = new HttpPost("http://ec2-52-79-55-255.ap-northeast-2.compute.amazonaws.com:8080/google");
+                    HttpClient httpClient = new DefaultHttpClient();
+                    try {
+                        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(1);
+                        nameValuePairs.add(new BasicNameValuePair("authCode", authCode));
+                        httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
 
-                    HttpResponse response = httpClient.execute(httpPost);
+                        HttpResponse response = httpClient.execute(httpPost);
 
-                    int statusCode = response.getStatusLine().getStatusCode();
-                    final String responseBody = EntityUtils.toString(response.getEntity());
+                        int statusCode = response.getStatusLine().getStatusCode(); //잘 갔다면 200이 저장됨.
+                        final String responseBody = EntityUtils.toString(response.getEntity());
 
-                } catch (ClientProtocolException e) {
-                    Log.e(TAG, "Error sending auth code to backend.", e);
-                } catch (IOException e) {
-                    Log.e(TAG, "Error sending auth code to backend.", e);
-                }
+                        // responseBody 이 부분에 담겨있는게 token DTO
+                        // 위에 저장을 빼고 받아온 걸로 저장해야 함.
+
+                        JSONParser parser = new JSONParser();
+                        Object obj = parser.parse(responseBody);
+                        JSONObject jsonObj = (JSONObject) obj;
+
+                        //User id
+                        Long user_id = (Long) jsonObj.get("user_id");
+
+                        String token = (String) jsonObj.get("token");
+                        String name = (String) jsonObj.get("name");
+                        String email = (String) jsonObj.get("email");
+                        String profile_pic = (String) jsonObj.get("profile_pic");
+
+
+                        Log.d(TAG, "받아온 결과 user_id:" +user_id);
+                        Log.d(TAG, "받아온 결과 token:" +token);
+                        Log.d(TAG, "받아온 결과 name:" +name);
+                        Log.d(TAG, "받아온 결과 email:" +email);
+                        Log.d(TAG, "받아온 결과 profile_pic:" +profile_pic);
+
+
+
+                    } catch (ClientProtocolException e) {
+                        Log.e(TAG, "Error sending auth code to backend.", e);
+                    } catch (IOException | ParseException e) {
+                        Log.e(TAG, "Error sending auth code to backend.", e);
+                    }
+                }).start();
 
 
 
@@ -210,8 +196,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 Log.w(TAG, "Sign-in failed", e);
                 //updateUI(null);
             }
-            handleSignInResult(task);
-
 
         }
     }

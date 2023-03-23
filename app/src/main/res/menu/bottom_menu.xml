@@ -6,7 +6,7 @@
         android:icon="@drawable/ic_baseline_stars_24"
         android:title="star"/>
     <item
-        android:id="@+id/action_home"
+        android:id="@+id/action_list"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_home_24"
         android:title="home"/>

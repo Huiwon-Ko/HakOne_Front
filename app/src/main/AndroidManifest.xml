@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+
+        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -32,6 +34,10 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity android:name="com.example.hakone.MyInterest"></activity>
+        <activity android:name="com.example.hakone.MyPage"></activity>
+        <activity android:name="com.example.hakone.ChangeProfile"></activity>
+        <activity android:name="com.example.hakone.MyReview"></activity>
     </application>
 
 </manifest>
