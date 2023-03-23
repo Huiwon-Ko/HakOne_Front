@@ -116,10 +116,9 @@ public class Home extends AppCompatActivity {
             @Override
             public void run() {
                 ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                Call<ResponseBody> call = apiInterface.getData();
+                Call<ResponseBody> call = apiInterface.getData(userId);
 
                 //Call<ResponseBody> call = apiInterface.postStarAcademy(userId, academyId);
-
 
                 try {
                     Response<ResponseBody> response = call.execute();
@@ -195,7 +194,9 @@ public class Home extends AppCompatActivity {
 
 
                             boolean isStar = jsonObject.getBoolean("star");
-                            //int review_count = jsonObject.getInt("review_count");
+                            double avg_score = jsonObject.getDouble("avg_score");
+                            //float avg_score = jsonObject.getInt("avg_score");
+                            int review_count = jsonObject.getInt("review_count");
 
                             HakOneList hakOne = new HakOneList(academyName, avgTuition, region, subjects);
                             hakOneList.add(hakOne);

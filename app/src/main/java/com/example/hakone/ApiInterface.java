@@ -12,13 +12,9 @@ import retrofit2.http.Path;
 
 public interface ApiInterface {
 
-    /*
-    @GET("/user/{user_id}/academy")
-    Call<List<HakOneList>> getData(@Path("user_id") long user_id);
 
-     */
-    @GET("/academy")
-    Call<ResponseBody> getData();
+    @GET("/user/{user_id}/academy")
+    Call<ResponseBody> getData(@Path("user_id") long user_id);
 
     @DELETE("/user/{user_id}")
     Call<Void> deleteUser(@Path("user_id") long user_id);
