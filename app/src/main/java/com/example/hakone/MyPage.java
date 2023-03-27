@@ -1,8 +1,11 @@
 package com.example.hakone;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -41,14 +44,17 @@ public class MyPage extends AppCompatActivity {
     GoogleSignInOptions gOptions;
     GoogleSignInClient gClient;
 
-    Login login = new Login();
-
-    long userId = login.user_id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mypage);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        long user_id = sharedPreferences.getLong("user_id", 0);
+
+        Log.d("TAG", "MyPage 받아온 결과 user_id:" +user_id);
+
 
         listView = (ListView)findViewById(R.id.mypage_list);
 
@@ -80,7 +86,6 @@ public class MyPage extends AppCompatActivity {
             }
         });
 
-
         data.add("          개인정보 수정");
         data.add("          내가 작성한 리뷰");
         data.add("          회원탈퇴");
@@ -106,7 +111,7 @@ public class MyPage extends AppCompatActivity {
 
                     builder.setPositiveButton("예", new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialogInterface, int which){
-                            Call<Void> call = ApiClient.getClient().create(ApiInterface.class).deleteUser(userId);
+                            Call<Void> call = ApiClient.getClient().create(ApiInterface.class).deleteUser(user_id);
 
                             call.enqueue(new Callback<Void>() {
                                 @Override

@@ -20,12 +20,15 @@ public interface ApiInterface {
     Call<Void> deleteUser(@Path("user_id") long user_id);
 
     @POST("/user/{user_id}/star/{academy_id}") //관심 등록
-    Call<Void> postStarAcademy(@Path("user_id") long user_id, @Path("academy_id") long academy_id);
+    Call<Void> postStarAcademy(@Path("user_id") long user_id, @Path("academy_id") long academyId);
 
     @DELETE("/user/{user_id}/star/{academy_id}") //관심 삭제
-    Call<Void> deleteStarAcademy(@Path("user_id") long user_id, @Path("academy_id") long academy_id);
+    Call<Void> deleteStarAcademy(@Path("user_id") long user_id, @Path("academy_id") long academyId);
 
     @GET("/user/{user_id}/star") //관심 전체 조회
     Call<ResponseBody> allStarAcademy(@Path("user_id") long user_id);
+
+    @GET("/user/{user_id}/academy/{academy_id}") //학원 상세페이지
+    Call<ResponseBody> getItem(@Path("user_id") long user_id, @Path("academy_id") long academy_id);
 
 }

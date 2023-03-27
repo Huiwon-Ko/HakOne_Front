@@ -1,6 +1,7 @@
 package com.example.hakone;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -25,6 +26,9 @@ public class MyInterest extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_myinterest);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        long user_id = sharedPreferences.getLong("user_id", 0);
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setSelectedItemId(R.id.action_star);

@@ -41,12 +41,23 @@
             <ImageButton
                 android:id="@+id/Interest"
                 android:layout_width="48dp"
-                android:layout_height="match_parent"
+                android:layout_height="48dp"
                 android:layout_weight="0"
+                android:layout_gravity="center"
                 android:enabled="true"
                 android:contentDescription="Interest"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_baseline_star_outline_24" />
+                app:srcCompat="@drawable/ic_baseline_star_outline_24"/>
+
+
+                <!--
+                android:background="@drawable/baseline_star_24"
+                android:background="@android:color/transparent"
+                app:srcCompat="@drawable/ic_baseline_star_outline_24"
+                -->
+
+
+
 
 
         </LinearLayout>
