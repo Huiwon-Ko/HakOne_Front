@@ -84,9 +84,9 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
     //private List<HakOneList> regionList; //지역 필터링 된 것들 넣어줄 것.
 
     // 검색시 같은 이름이 있는 아이템이 담길 리스트
-    ArrayList<HakOneList> search_list = new ArrayList<>();
+    //ArrayList<HakOneList> search_list = new ArrayList<>();
     // recyclerView에 추가할 아이템 리스트
-    ArrayList<HakOneList> original_list = new ArrayList<>();
+    //ArrayList<HakOneList> original_list = new ArrayList<>();
     EditText editText;
 
     public Home(){
@@ -100,6 +100,9 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         long user_id = sharedPreferences.getLong("user_id", 0);
+
+        //Log.d("TAG","Home user_id"+ user_id);
+
 
         //long user_id = getIntent().getLongExtra("user_id", 0);
 
@@ -336,6 +339,8 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
 
                             // 필요한 데이터 추출
                             long academyId = jsonObject.getLong("academyId");
+
+
                             String academyName = jsonObject.getString("academyName");
                             String region = jsonObject.getString("region");
                             String tel = jsonObject.getString("tel");
@@ -391,10 +396,12 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
                             }
 
                         }
+                        //SharedPreferences.Editor editor = sharedPreferences.edit();
 
                         for (HakOneList hakOne : hakOneList1) {
                             Log.d("Tag", "name: " + hakOne.getAcademyName() + ", avgTuition: " + hakOne.getAvgTuition());
                         }
+
 
 
                         Log.d("Tag", "hakOneList1" + hakOneList1); //이거는 보여짐
@@ -407,13 +414,15 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
                             }
                         });
 
+
+
                         // InputStream 닫기
                         inputStream.close();
                     } else {
                         // 실패 처리
                         Log.e("TAG", "에러 발생 메시지");
                     }
-
+                    //SharedPreferences sharedPreferences = getSharedPreferences("MyPrefsItem", MODE_PRIVATE);
 
                 } catch (IOException | JSONException e) {
                     e.printStackTrace();
@@ -480,82 +489,9 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
 
     @Override
     public void onItemClick(int position) {
-        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-        Call<ResponseBody> call = apiInterface.getItem(user_id, academyId);
 
-        try {
-            Response<ResponseBody> response = call.execute();
-
-            if (response.isSuccessful()) {
-
-                // JSON 데이터 파싱
-                String json = response.toString();
-                JSONArray jsonArray = new JSONArray(json);
-                HashMap<String, Integer> classList = new HashMap<>();
-                ArrayList<String> itemsubjects = new ArrayList<>();
-
-                for (int i = 0; i < jsonArray.length(); i++) {
-                    JSONObject jsonObject = jsonArray.getJSONObject(i);
-
-                    // 필요한 데이터 추출
-                    String academyName = jsonObject.getString("academyName");
-                    String address = jsonObject.getString("address");
-                    String tel = jsonObject.getString("tel");
-                    int teacher = jsonObject.getInt("teacher");
-
-                    JSONArray subjectListArray = jsonObject.getJSONArray("subjectList");
-                    boolean korean = subjectListArray.getBoolean(0);
-                    boolean english = subjectListArray.getBoolean(1);
-                    boolean math = subjectListArray.getBoolean(2);
-                    boolean social = subjectListArray.getBoolean(3);
-                    boolean science = subjectListArray.getBoolean(4);
-                    boolean foreign = subjectListArray.getBoolean(5);
-                    boolean essay = subjectListArray.getBoolean(6);
-                    boolean art = subjectListArray.getBoolean(7);
-                    boolean sub_etc = subjectListArray.getBoolean(8);
-
-                    if (subjectListArray.getBoolean(0)) itemsubjects.add("국어");
-                    if (subjectListArray.getBoolean(1)) itemsubjects.add("영어");
-                    if (subjectListArray.getBoolean(2)) itemsubjects.add("수학");
-                    if (subjectListArray.getBoolean(3)) itemsubjects.add("사회");
-                    if (subjectListArray.getBoolean(4)) itemsubjects.add("과학");
-                    if (subjectListArray.getBoolean(5)) itemsubjects.add("외국어");
-                    if (subjectListArray.getBoolean(6)) itemsubjects.add("논술");
-                    if (subjectListArray.getBoolean(7)) itemsubjects.add("예능");
-                    if (subjectListArray.getBoolean(8)) itemsubjects.add("기타");
-
-                    int avgTuition = jsonObject.getInt("avgTuition");
-
-                    String className = jsonObject.getString("className");
-                    int tuition = jsonObject.getInt("tuition");
-                    classList.put(className, tuition);
-
-
-                    boolean star = jsonObject.getBoolean("star");
-                    Log.d("TAG", subjects.toString());
-                    float avg_score = (float) jsonObject.getDouble("avg_score");
-                    int review_count = jsonObject.getInt("review_count");
-
-                }
-
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        adapter.notifyDataSetChanged();
-                    }
-                });
-
-            } else {
-                // 실패 처리
-                Log.e("TAG", "에러 발생 메시지");
-            }
-
-
-        } catch (IOException | JSONException e) {
-            e.printStackTrace();
-            Log.e("TAG", "서버 연결 오류: " + e.getMessage());
-        }
     }
+
 
 }
 

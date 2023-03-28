@@ -51,11 +51,15 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
         this.academyId = academyId;
         this.isStar = isStar;
 
-        SharedPreferences sharedPref = context.getSharedPreferences("myPreferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
+        /*
+        SharedPreferences sharedPreferences = context.getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putLong("user_id", user_id);
+        editor.putLong("academyId", academyId);
         editor.putBoolean("isStar", isStar);
         editor.apply();
+
+         */
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)

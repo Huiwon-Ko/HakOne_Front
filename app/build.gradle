@@ -54,7 +54,7 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0' //위와 관련
 
     //noinspection GradleCompatible
-    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
 
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
@@ -70,9 +70,20 @@ dependencies {
 
     implementation 'com.google.code.gson:gson:2.8.8'
 
+    // 네이버 지도 SDK
+    implementation 'com.naver.maps:map-sdk:3.16.2'
+
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+
+    implementation('com.naver.maps:map-sdk:3.16.2') {
+        exclude group: 'com.android.support'
+    }
+
 }
 configurations.all {
     resolutionStrategy.dependencySubstitution {
         substitute module('org.hamcrest:hamcrest-core:1.1') with module('junit:junit:4.10')
     }
+
+
 }

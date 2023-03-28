@@ -38,6 +38,13 @@
         <activity android:name="com.example.hakone.MyPage"></activity>
         <activity android:name="com.example.hakone.ChangeProfile"></activity>
         <activity android:name="com.example.hakone.MyReview"></activity>
+        <activity android:name="com.example.hakone.HakOneItem"></activity>
+
+
+        <meta-data
+            android:name="com.naver.maps.map.CLIENT_ID"
+            android:value="msuzzar6hb" />
+
     </application>
 
 </manifest>

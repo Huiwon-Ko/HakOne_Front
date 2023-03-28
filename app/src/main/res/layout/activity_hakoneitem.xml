@@ -1,27 +1,153 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:orientation="vertical"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/academyName"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center|left"
+            android:layout_weight="1"
+            android:padding="10dp"
+            android:text="학원 이름" />
+
+        <TextView
+            android:id="@+id/avg_score"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:gravity="center|right"
+            android:padding="10dp"
+            android:text="리뷰 점수" />
+
+        <TextView
+            android:id="@+id/review_count"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:padding="10dp"
+            android:gravity="center|right"
+            android:text="리뷰 개수" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/Interest"
+            android:layout_marginLeft="60dp"
+            android:layout_marginRight="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:layout_gravity="center"
+            android:enabled="true"
+            android:text="관심 등록"
+            android:drawableRight="@drawable/ic_baseline_star_outline_24"/>
+
+        <Button
+            android:id="@+id/Review"
+            android:layout_marginLeft="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_weight="0"
+            android:layout_gravity="center"
+            android:enabled="true"
+            android:text="학원 리뷰"
+            android:drawableRight="@drawable/baseline_format_list_bulleted_24"/>
+
+    </LinearLayout>
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="학원 세부 페이지"
-        android:textSize="40dp">
-    </TextView>
+        android:id="@+id/subjectList"
+        android:text="과목 목록"
+        android:layout_marginLeft="40dp"/>
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavi"
-        android:layout_width="match_parent"
+
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:itemIconTint="#000000"
-        app:itemTextColor="#000000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:menu="@menu/bottom_menu"
-        tools:layout_editor_absoluteX="8dp"
-        android:layout_alignParentBottom="true" />
+        android:drawableLeft="@drawable/ic_baseline_local_phone_24"
+        android:id="@+id/tel"
+        android:text="전화번호"
+        android:layout_marginLeft="40dp"/>
 
-</RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/baseline_place_24"
+        android:id="@+id/address"
+        android:text="주소"
+        android:layout_marginLeft="40dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/baseline_person_24"
+        android:id="@+id/teacher"
+        android:text="강사 수"
+        android:layout_marginLeft="40dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/baseline_monetization_on_24"
+        android:id="@+id/avg_tuition"
+        android:text="학원비"
+        android:layout_marginLeft="40dp" />
+
+
+    <TableLayout
+        android:id="@+id/tablelayout"
+        android:layout_width="280dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content"
+        android:stretchColumns="*">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/class_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="반"/>
+
+            <TextView
+                android:id="@+id/class_tuition"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="수강료"/>
+
+        </TableRow>
+
+    </TableLayout>
+
+    <androidx.fragment.app.FragmentContainerView
+        android:layout_marginTop="40dp"
+        android:id="@+id/map_fragment"
+        android:name="com.naver.maps.map.MapFragment"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        tools:layout="@android:layout/simple_gallery_item" />
+
+</LinearLayout>

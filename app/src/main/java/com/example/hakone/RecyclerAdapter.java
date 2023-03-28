@@ -1,5 +1,6 @@
 package com.example.hakone;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.hakone.ApiClient.BASE_URL;
 import static com.example.hakone.Home.hakOneList1;
 
@@ -27,6 +28,7 @@ import retrofit2.Retrofit;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>{
     private final RecyclerViewInterface recyclerViewInterface;
+    private SharedPreferences sharedPreferences;
     private List<HakOneList> hakOneList;
     //private List<HakOneList> hakOneListFull;
     //private List<HakOneList> regionList; //지역 필터링 된 것들 넣어줄 것.
@@ -50,15 +52,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         this.user_id = user_id;
         this.academyId = academyId;
         this.isStar = isStar;
-        //hakOneListFull = new ArrayList<>(hakOneList);
 
+        sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
-        // SharedPreferences에 값 저장
-        SharedPreferences sharedPref = context.getSharedPreferences("myPreferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.putLong("user_id", user_id);
-        editor.putBoolean("isStar", isStar);
-        editor.apply();
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -119,6 +115,24 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             avgTuition = itemView.findViewById(R.id.avgTuition);
             subjectList = itemView.findViewById(R.id.Subject_list);
             Interest = itemView.findViewById(R.id.Interest);
+
+
+            itemView.setClickable(true);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        long clickedAcademyId = hakOneList.get(position).getAcademyId();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putLong("academyId", clickedAcademyId);
+                        editor.apply();
+
+                        Intent intent = new Intent(context, HakOneItem.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                }
+            });
 
             Interest.setOnClickListener(new View.OnClickListener() {
                 @Override
