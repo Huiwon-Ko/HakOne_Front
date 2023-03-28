@@ -1,6 +1,8 @@
 package com.example.hakone;
 
 import static android.content.Context.MODE_PRIVATE;
+//import static com.example.hakone.Home.subjects;
+
 import static com.example.hakone.Home.subjects;
 
 import android.content.Intent;
@@ -51,6 +53,7 @@ public class MyInterest extends AppCompatActivity implements RecyclerViewInterfa
     public long academyId;
 
     public long user_id;
+    public static ArrayList<String> subjects;
 
 
 
@@ -67,6 +70,7 @@ public class MyInterest extends AppCompatActivity implements RecyclerViewInterfa
         for (HakOneList hakOne : hakOneList1) {
             Log.d("Tag", "MyInterest name: " + hakOne.getAcademyName() + ", MyInterest avgTuition: " + hakOne.getAvgTuition());
         }
+
         setContentView(R.layout.activity_myinterest);
 
         recyclerView = findViewById(R.id.InterestRecyclerView);
@@ -77,86 +81,6 @@ public class MyInterest extends AppCompatActivity implements RecyclerViewInterfa
         recyclerView.setAdapter(adapter);
 
 
-
-/*
-        Home home = new Home();
-        List<HakOneList> starredList = home.getStarredHakOneList();
-        Log.d("Tag", "starredList" + starredList);
-
- */
-
-
-
-
-
-        /*
-        recyclerView = findViewById(R.id.InterestRecyclerView);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-        adapter = new MyInterestAdapter(hakOneItemLists, this, subjects, this, user_id, academyId, isStar);
-        recyclerView.setAdapter(adapter);
-
-         */
-
-    /*
-
-    protected void onCreate(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        View root = inflater.inflate(R.layout.activity_myinterest, container, false);
-
-        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-        long user_id = sharedPreferences.getLong("user_id", 0);
-        long academyId = sharedPreferences.getLong("academyId", 0);
-        boolean isStar = sharedPreferences.getBoolean("isStar", false);
-
-        recyclerView = root.findViewById(R.id.InterestRecyclerView);
-        recyclerView.setHasFixedSize(true);
-
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-        adapter = new MyInterestAdapter(hakOneItemLists, this, subjects, this, user_id, academyId, isStar);
-        recyclerView.setAdapter(adapter);
-
-
-     */
-
-
-        /*
-        Intent intent = getIntent();
-        RecyclerAdapter MyInterestAdapter = (RecyclerAdapter) intent.getSerializableExtra("starAcademy");
-
-        recyclerView = findViewById(R.id.InterestRecyclerView);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(MyInterestAdapter);
-
-         */
-/*
-
-        Log.d("Tag", "hakOneList" + hakOneList);
-
-        starredHakOneList = new ArrayList<>();
-        for (HakOneList hakOne : hakOneList) {
-            if (hakOne.isStar()) {
-                starredHakOneList.add(hakOne);
-            }
-        }
-
-
-        Log.d("Tag", "starredHakOneList" + starredHakOneList);
-
-        recyclerView = findViewById(R.id.InterestRecyclerView);
-        adapter = new MyInterestAdapter(this, starredHakOneList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(adapter);
-
-
-
-
- */
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setSelectedItemId(R.id.action_star);
@@ -198,7 +122,7 @@ public class MyInterest extends AppCompatActivity implements RecyclerViewInterfa
                 String json = response.toString();
                 JSONArray jsonArray = new JSONArray(json);
                 HashMap<String, Integer> classList = new HashMap<>();
-                ArrayList<String> subjects = new ArrayList<>();
+                ArrayList<String> itemsubjects = new ArrayList<>();
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -220,15 +144,15 @@ public class MyInterest extends AppCompatActivity implements RecyclerViewInterfa
                     boolean art = subjectListArray.getBoolean(7);
                     boolean sub_etc = subjectListArray.getBoolean(8);
 
-                    if (subjectListArray.getBoolean(0)) subjects.add("국어");
-                    if (subjectListArray.getBoolean(1)) subjects.add("영어");
-                    if (subjectListArray.getBoolean(2)) subjects.add("수학");
-                    if (subjectListArray.getBoolean(3)) subjects.add("사회");
-                    if (subjectListArray.getBoolean(4)) subjects.add("과학");
-                    if (subjectListArray.getBoolean(5)) subjects.add("외국어");
-                    if (subjectListArray.getBoolean(6)) subjects.add("논술");
-                    if (subjectListArray.getBoolean(7)) subjects.add("예능");
-                    if (subjectListArray.getBoolean(8)) subjects.add("기타");
+                    if (subjectListArray.getBoolean(0)) itemsubjects.add("국어");
+                    if (subjectListArray.getBoolean(1)) itemsubjects.add("영어");
+                    if (subjectListArray.getBoolean(2)) itemsubjects.add("수학");
+                    if (subjectListArray.getBoolean(3)) itemsubjects.add("사회");
+                    if (subjectListArray.getBoolean(4)) itemsubjects.add("과학");
+                    if (subjectListArray.getBoolean(5)) itemsubjects.add("외국어");
+                    if (subjectListArray.getBoolean(6)) itemsubjects.add("논술");
+                    if (subjectListArray.getBoolean(7)) itemsubjects.add("예능");
+                    if (subjectListArray.getBoolean(8)) itemsubjects.add("기타");
 
                     int avgTuition = jsonObject.getInt("avgTuition");
 
