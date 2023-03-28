@@ -26,14 +26,13 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.ViewHolder> {
-    //private final RecyclerViewInterface recyclerViewInterface;
-
     private final RecyclerViewInterface recyclerViewInterface;
+    private List<HakOneList> hakOneList1;
     private Context context;
+
     //private List<HakOneList> hakOneItemLists;
     private List<String> subjects;
 
-    private List<HakOneList> hakOneList1;
 
     private long user_id;
     private boolean isStar;
@@ -63,7 +62,6 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
                 .build();
         apiInterface = retrofit.create(ApiInterface.class);
 
-
     }
 
     @NonNull
@@ -72,7 +70,6 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.interest_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view, recyclerViewInterface);
         return viewHolder;
-        //return new ViewHolder(view);
     }
 
     @Override
@@ -80,13 +77,12 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
         HakOneList hakone = hakOneList1.get(position);
         boolean isStar = hakone.isStar();
         holder.bind(hakone);
-        //holder.academyName.setText(hakOne.getAcademyName());
-        //holder.avgTuition.setText(hakOne.getAvgTuition() + "원");
-        //holder.subjects.setText(TextUtils.join(", ", hakOne.getSubjects()));
-        // ...
+
         if (subjects != null) {
             String subject = subjects.get(position);
             holder.subjectList.setText(subject);
+            Log.d("TAG", "MyInterest subject" + subject);
+            Log.d("TAG", "MyInterest subjects" + subjects);
         }
         if (isStar== true) {
             holder.Interest.setImageResource(R.drawable.baseline_star_24);
@@ -153,7 +149,7 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
 
                 }
             });
-            // ...
+
         }
         void bind(HakOneList hakone) {
             academyName.setText(hakone.getAcademyName());

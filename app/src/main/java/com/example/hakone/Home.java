@@ -80,6 +80,7 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
     public String academyName;
 
     public static ArrayList<String> subjects;
+
     //private List<HakOneList> regionList; //지역 필터링 된 것들 넣어줄 것.
 
     // 검색시 같은 이름이 있는 아이템이 담길 리스트
@@ -106,6 +107,7 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
 
         hakOneList = new ArrayList<>(); //hakOneList 객체 초기화
         hakOneList1 = new ArrayList<>();
+
 
 
         EditText editText = findViewById(R.id.editText);
@@ -297,6 +299,8 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
                 Log.d("TAG", "Home 받아온 결과 user_id:" +user_id);
                 Call<ResponseBody> call = apiInterface.getData(user_id);
 
+                List<String> subjects = new ArrayList<>(); // 지역 변수로 변경
+
 
                 try {
                     Response<ResponseBody> response = call.execute();
@@ -432,47 +436,6 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
 
 
 
-        /*
-
-        Intent intent = new Intent(Home.this, MyInterest.class);
-        ArrayList<HakOneList> hakOneList1 = new ArrayList<>();
-        for (HakOneList hakOne : hakOneList) {
-            if (hakOne.isStar()) {
-                hakOneList1.add(hakOne);
-            }
-        }
-
-
-        RecyclerAdapter MyInterestAdapter = new RecyclerAdapter(hakOneList1, this, subjects, this, user_id, academyId, isStar);
-
-
-        intent.putExtra("starAcademy", hakOneList1);
-        startActivity(intent);
-
-        Log.d("Tag", "hakOneList1" + hakOneList1);
-
-         */
-
-
-
-        /*
-
-        List<HakOneList> myInterestList = new ArrayList<>();
-        for (HakOneList hakOne : hakOneList) {
-            if (hakOne.isStar()) {
-                myInterestList.add(hakOne);
-            }
-        }
-        Log.d("Tag", "myInterestList" + myInterestList);
-        Intent intent = new Intent(Home.this, MyInterest.class);
-        intent.putExtra("hakOneList", (Serializable) myInterestList);
-        startActivity(intent);
-
-         */
-
-
-
-
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setSelectedItemId(R.id.action_list);
 
@@ -497,16 +460,6 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
                 return false;
             }
         });
-    }
-
-
-    // Home 클래스
-    public List<HakOneList> getStarredHakOneList() {
-
-        for (HakOneList hakOne : hakOneList1) {
-            Log.d("Tag", "name: " + hakOne.getAcademyName() + ", avgTuition: " + hakOne.getAvgTuition());
-        }
-        return hakOneList1;
     }
 
 
@@ -539,7 +492,7 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
                 String json = response.toString();
                 JSONArray jsonArray = new JSONArray(json);
                 HashMap<String, Integer> classList = new HashMap<>();
-                ArrayList<String> subjects = new ArrayList<>();
+                ArrayList<String> itemsubjects = new ArrayList<>();
 
                 for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
@@ -561,15 +514,15 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
                     boolean art = subjectListArray.getBoolean(7);
                     boolean sub_etc = subjectListArray.getBoolean(8);
 
-                    if (subjectListArray.getBoolean(0)) subjects.add("국어");
-                    if (subjectListArray.getBoolean(1)) subjects.add("영어");
-                    if (subjectListArray.getBoolean(2)) subjects.add("수학");
-                    if (subjectListArray.getBoolean(3)) subjects.add("사회");
-                    if (subjectListArray.getBoolean(4)) subjects.add("과학");
-                    if (subjectListArray.getBoolean(5)) subjects.add("외국어");
-                    if (subjectListArray.getBoolean(6)) subjects.add("논술");
-                    if (subjectListArray.getBoolean(7)) subjects.add("예능");
-                    if (subjectListArray.getBoolean(8)) subjects.add("기타");
+                    if (subjectListArray.getBoolean(0)) itemsubjects.add("국어");
+                    if (subjectListArray.getBoolean(1)) itemsubjects.add("영어");
+                    if (subjectListArray.getBoolean(2)) itemsubjects.add("수학");
+                    if (subjectListArray.getBoolean(3)) itemsubjects.add("사회");
+                    if (subjectListArray.getBoolean(4)) itemsubjects.add("과학");
+                    if (subjectListArray.getBoolean(5)) itemsubjects.add("외국어");
+                    if (subjectListArray.getBoolean(6)) itemsubjects.add("논술");
+                    if (subjectListArray.getBoolean(7)) itemsubjects.add("예능");
+                    if (subjectListArray.getBoolean(8)) itemsubjects.add("기타");
 
                     int avgTuition = jsonObject.getInt("avgTuition");
 

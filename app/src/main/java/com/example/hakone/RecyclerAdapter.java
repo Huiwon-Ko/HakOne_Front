@@ -1,6 +1,7 @@
 package com.example.hakone;
 
 import static com.example.hakone.ApiClient.BASE_URL;
+import static com.example.hakone.Home.hakOneList1;
 
 import android.content.Context;
 import android.content.Intent;
@@ -27,7 +28,7 @@ import retrofit2.Retrofit;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>{
     private final RecyclerViewInterface recyclerViewInterface;
     private List<HakOneList> hakOneList;
-    private List<HakOneList> hakOneListFull;
+    //private List<HakOneList> hakOneListFull;
     //private List<HakOneList> regionList; //지역 필터링 된 것들 넣어줄 것.
 
     private Context context;
@@ -49,7 +50,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         this.user_id = user_id;
         this.academyId = academyId;
         this.isStar = isStar;
-        hakOneListFull = new ArrayList<>(hakOneList);
+        //hakOneListFull = new ArrayList<>(hakOneList);
+
 
         // SharedPreferences에 값 저장
         SharedPreferences sharedPref = context.getSharedPreferences("myPreferences", Context.MODE_PRIVATE);
@@ -78,11 +80,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         boolean isStar = hakone.isStar();
         holder.bind(hakone);
 
+        //Log.d("TAG", "RecyclerAdapter subject" + subject);
+        Log.d("TAG", "RecyclerAdapter subjects" + subjects);
+
+
         if (subjects != null) {
             String subject = subjects.get(position);
             holder.subjectList.setText(subject);
+            //Log.d("TAG", "RecyclerAdapter subject" + subject);
+            //Log.d("TAG", "RecyclerAdapter subjects" + subjects);
         }
-
         if (isStar== true) {
             holder.Interest.setImageResource(R.drawable.baseline_star_24);
             Log.d("TAG", "Star isStar" + isStar);
@@ -94,8 +101,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     }
 
     @Override
-    public int getItemCount() {
-        if(hakOneList==null) return 0;
+    public int getItemCount() {if(hakOneList==null) return 0;
         return hakOneList.size();
     }
 
