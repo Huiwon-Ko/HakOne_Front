@@ -18,6 +18,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.os.Parcelable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -46,7 +47,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -58,6 +61,8 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
     RecyclerView recyclerView; // 리사이클러뷰 객체 선언
     RecyclerAdapter adapter; // 어댑터 객체 선언
     List<HakOneList> hakOneList = new ArrayList<>(); // 데이터 리스트
+    public static List<HakOneList> hakOneList1 = new ArrayList<>();
+    List<HakOneList> MyInterestList = new ArrayList<>();
 
     private Spinner regionSpinner;
     private Spinner subjectSpinner;
@@ -69,6 +74,10 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
     public long user_id;
 
     public boolean isStar;
+
+    public int avgTuition;
+
+    public String academyName;
 
     public static ArrayList<String> subjects;
     //private List<HakOneList> regionList; //지역 필터링 된 것들 넣어줄 것.
@@ -96,6 +105,8 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
         recyclerView = findViewById(R.id.recyclerView); // 리사이클러뷰 뷰 ID 연결
 
         hakOneList = new ArrayList<>(); //hakOneList 객체 초기화
+        hakOneList1 = new ArrayList<>();
+
 
         EditText editText = findViewById(R.id.editText);
         editText.addTextChangedListener(new TextWatcher() {
@@ -371,8 +382,19 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
                                     elementary, middle, high, grace_etc, isStar, academyId);
                             hakOneList.add(hakOne);
 
-                            // ...
+                            if (hakOne.isStar()) {
+                                hakOneList1.add(hakOne);
+                            }
+
                         }
+
+                        for (HakOneList hakOne : hakOneList1) {
+                            Log.d("Tag", "name: " + hakOne.getAcademyName() + ", avgTuition: " + hakOne.getAvgTuition());
+                        }
+
+
+                        Log.d("Tag", "hakOneList1" + hakOneList1); //이거는 보여짐
+                        Log.d("Tag", "hakOneList1" + hakOneList1.toString());
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -398,14 +420,57 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
 
 
 
+
+
         // 리사이클러뷰 레이아웃 매니저 설정
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 
-
         // 어댑터 객체 생성 및 리사이클러뷰에 연결
         adapter = new RecyclerAdapter(hakOneList, this, subjects, this, user_id, academyId, isStar);
         recyclerView.setAdapter(adapter);
+
+
+
+        /*
+
+        Intent intent = new Intent(Home.this, MyInterest.class);
+        ArrayList<HakOneList> hakOneList1 = new ArrayList<>();
+        for (HakOneList hakOne : hakOneList) {
+            if (hakOne.isStar()) {
+                hakOneList1.add(hakOne);
+            }
+        }
+
+
+        RecyclerAdapter MyInterestAdapter = new RecyclerAdapter(hakOneList1, this, subjects, this, user_id, academyId, isStar);
+
+
+        intent.putExtra("starAcademy", hakOneList1);
+        startActivity(intent);
+
+        Log.d("Tag", "hakOneList1" + hakOneList1);
+
+         */
+
+
+
+        /*
+
+        List<HakOneList> myInterestList = new ArrayList<>();
+        for (HakOneList hakOne : hakOneList) {
+            if (hakOne.isStar()) {
+                myInterestList.add(hakOne);
+            }
+        }
+        Log.d("Tag", "myInterestList" + myInterestList);
+        Intent intent = new Intent(Home.this, MyInterest.class);
+        intent.putExtra("hakOneList", (Serializable) myInterestList);
+        startActivity(intent);
+
+         */
+
+
 
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
@@ -435,6 +500,18 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
     }
 
 
+    // Home 클래스
+    public List<HakOneList> getStarredHakOneList() {
+
+        for (HakOneList hakOne : hakOneList1) {
+            Log.d("Tag", "name: " + hakOne.getAcademyName() + ", avgTuition: " + hakOne.getAvgTuition());
+        }
+        return hakOneList1;
+    }
+
+
+
+
     private void filter(String text){
         ArrayList<HakOneList> filteredList = new ArrayList<>();
 
@@ -445,6 +522,8 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
         }
         adapter.filterList(filteredList);
     }
+
+
 
     @Override
     public void onItemClick(int position) {

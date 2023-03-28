@@ -1,8 +1,13 @@
 package com.example.hakone;
 
+import static android.content.Context.MODE_PRIVATE;
+import static com.example.hakone.Home.subjects;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -10,25 +15,148 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-public class MyInterest extends AppCompatActivity {
+
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Response;
+
+
+public class MyInterest extends AppCompatActivity implements RecyclerViewInterface{
+
+    private RecyclerView recyclerView;
+    private MyInterestAdapter adapter;
+    private List<HakOneList> hakOneItemLists = new ArrayList<>();
+
     BottomNavigationView bottomNavigationView;
+    List<HakOneList> hakOneList1 = Home.hakOneList1;
+
+    public long academyId;
+
+    public long user_id;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_myinterest);
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         long user_id = sharedPreferences.getLong("user_id", 0);
+        long academyId = sharedPreferences.getLong("academyId", 0);
+        boolean isStar = sharedPreferences.getBoolean("isStar", false);
+
+        Log.d("Tag", "MyInterest hakOneList1" + hakOneList1);
+        for (HakOneList hakOne : hakOneList1) {
+            Log.d("Tag", "MyInterest name: " + hakOne.getAcademyName() + ", MyInterest avgTuition: " + hakOne.getAvgTuition());
+        }
+        setContentView(R.layout.activity_myinterest);
+
+        recyclerView = findViewById(R.id.InterestRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+
+        adapter = new MyInterestAdapter(hakOneList1, this, subjects, this, user_id, academyId, isStar);
+        recyclerView.setAdapter(adapter);
+
+
+
+/*
+        Home home = new Home();
+        List<HakOneList> starredList = home.getStarredHakOneList();
+        Log.d("Tag", "starredList" + starredList);
+
+ */
+
+
+
+
+
+        /*
+        recyclerView = findViewById(R.id.InterestRecyclerView);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        adapter = new MyInterestAdapter(hakOneItemLists, this, subjects, this, user_id, academyId, isStar);
+        recyclerView.setAdapter(adapter);
+
+         */
+
+    /*
+
+    protected void onCreate(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        View root = inflater.inflate(R.layout.activity_myinterest, container, false);
+
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+        long user_id = sharedPreferences.getLong("user_id", 0);
+        long academyId = sharedPreferences.getLong("academyId", 0);
+        boolean isStar = sharedPreferences.getBoolean("isStar", false);
+
+        recyclerView = root.findViewById(R.id.InterestRecyclerView);
+        recyclerView.setHasFixedSize(true);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        adapter = new MyInterestAdapter(hakOneItemLists, this, subjects, this, user_id, academyId, isStar);
+        recyclerView.setAdapter(adapter);
+
+
+     */
+
+
+        /*
+        Intent intent = getIntent();
+        RecyclerAdapter MyInterestAdapter = (RecyclerAdapter) intent.getSerializableExtra("starAcademy");
+
+        recyclerView = findViewById(R.id.InterestRecyclerView);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(MyInterestAdapter);
+
+         */
+/*
+
+        Log.d("Tag", "hakOneList" + hakOneList);
+
+        starredHakOneList = new ArrayList<>();
+        for (HakOneList hakOne : hakOneList) {
+            if (hakOne.isStar()) {
+                starredHakOneList.add(hakOne);
+            }
+        }
+
+
+        Log.d("Tag", "starredHakOneList" + starredHakOneList);
+
+        recyclerView = findViewById(R.id.InterestRecyclerView);
+        adapter = new MyInterestAdapter(this, starredHakOneList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(adapter);
+
+
+
+
+ */
 
         bottomNavigationView = findViewById(R.id.bottomNavi);
         bottomNavigationView.setSelectedItemId(R.id.action_star);
@@ -54,5 +182,84 @@ public class MyInterest extends AppCompatActivity {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
+        Call<ResponseBody> call = apiInterface.getItem(user_id, academyId);
+
+        try {
+            Response<ResponseBody> response = call.execute();
+
+            if (response.isSuccessful()) {
+
+                // JSON 데이터 파싱
+                String json = response.toString();
+                JSONArray jsonArray = new JSONArray(json);
+                HashMap<String, Integer> classList = new HashMap<>();
+                ArrayList<String> subjects = new ArrayList<>();
+
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+                    // 필요한 데이터 추출
+                    String academyName = jsonObject.getString("academyName");
+                    String address = jsonObject.getString("address");
+                    String tel = jsonObject.getString("tel");
+                    int teacher = jsonObject.getInt("teacher");
+
+                    JSONArray subjectListArray = jsonObject.getJSONArray("subjectList");
+                    boolean korean = subjectListArray.getBoolean(0);
+                    boolean english = subjectListArray.getBoolean(1);
+                    boolean math = subjectListArray.getBoolean(2);
+                    boolean social = subjectListArray.getBoolean(3);
+                    boolean science = subjectListArray.getBoolean(4);
+                    boolean foreign = subjectListArray.getBoolean(5);
+                    boolean essay = subjectListArray.getBoolean(6);
+                    boolean art = subjectListArray.getBoolean(7);
+                    boolean sub_etc = subjectListArray.getBoolean(8);
+
+                    if (subjectListArray.getBoolean(0)) subjects.add("국어");
+                    if (subjectListArray.getBoolean(1)) subjects.add("영어");
+                    if (subjectListArray.getBoolean(2)) subjects.add("수학");
+                    if (subjectListArray.getBoolean(3)) subjects.add("사회");
+                    if (subjectListArray.getBoolean(4)) subjects.add("과학");
+                    if (subjectListArray.getBoolean(5)) subjects.add("외국어");
+                    if (subjectListArray.getBoolean(6)) subjects.add("논술");
+                    if (subjectListArray.getBoolean(7)) subjects.add("예능");
+                    if (subjectListArray.getBoolean(8)) subjects.add("기타");
+
+                    int avgTuition = jsonObject.getInt("avgTuition");
+
+                    String className = jsonObject.getString("className");
+                    int tuition = jsonObject.getInt("tuition");
+                    classList.put(className, tuition);
+
+
+                    boolean star = jsonObject.getBoolean("star");
+                    Log.d("TAG", subjects.toString());
+                    float avg_score = (float) jsonObject.getDouble("avg_score");
+                    int review_count = jsonObject.getInt("review_count");
+
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+
+            } else {
+                // 실패 처리
+                Log.e("TAG", "에러 발생 메시지");
+            }
+
+
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            Log.e("TAG", "서버 연결 오류: " + e.getMessage());
+        }
     }
 }
