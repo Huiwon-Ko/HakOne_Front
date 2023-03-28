@@ -3,8 +3,8 @@ package com.example.hakone;
 import static com.example.hakone.ApiClient.BASE_URL;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.RecyclerView.Adapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,14 +25,15 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyViewHolder>{
-    private final RecyclerViewInterface recyclerViewInterface;
-    private List<HakOneList> hakOneList;
-    private List<HakOneList> hakOneListFull;
-    //private List<HakOneList> regionList; //지역 필터링 된 것들 넣어줄 것.
+public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.ViewHolder> {
+    //private final RecyclerViewInterface recyclerViewInterface;
 
+    private final RecyclerViewInterface recyclerViewInterface;
     private Context context;
+    //private List<HakOneList> hakOneItemLists;
     private List<String> subjects;
+
+    private List<HakOneList> hakOneList1;
 
     private long user_id;
     private boolean isStar;
@@ -41,17 +43,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
     private final ApiInterface apiInterface;
 
 
-    public RecyclerAdapter(List<HakOneList> hakOneList, Context context, List<String> subjects, RecyclerViewInterface recyclerViewInterface, long user_id, long academyId, boolean isStar){
-        this.hakOneList = hakOneList;
+    public MyInterestAdapter(List<HakOneList> hakOneList1, Context context, List<String> subjects, RecyclerViewInterface recyclerViewInterface, long user_id, long academyId, boolean isStar) {
+        this.hakOneList1 = hakOneList1;
         this.context = context;
         this.subjects = subjects;
         this.recyclerViewInterface = recyclerViewInterface;
         this.user_id = user_id;
         this.academyId = academyId;
         this.isStar = isStar;
-        hakOneListFull = new ArrayList<>(hakOneList);
 
-        // SharedPreferences에 값 저장
         SharedPreferences sharedPref = context.getSharedPreferences("myPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putLong("user_id", user_id);
@@ -62,27 +62,32 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 .baseUrl(BASE_URL)
                 .build();
         apiInterface = retrofit.create(ApiInterface.class);
+
+
     }
 
     @NonNull
     @Override
-    public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_list, parent, false);
-        MyViewHolder viewHolder = new MyViewHolder(view, recyclerViewInterface);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.interest_item, parent, false);
+        ViewHolder viewHolder = new ViewHolder(view, recyclerViewInterface);
         return viewHolder;
+        //return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        HakOneList hakone = hakOneList.get(position);
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        HakOneList hakone = hakOneList1.get(position);
         boolean isStar = hakone.isStar();
         holder.bind(hakone);
-
+        //holder.academyName.setText(hakOne.getAcademyName());
+        //holder.avgTuition.setText(hakOne.getAvgTuition() + "원");
+        //holder.subjects.setText(TextUtils.join(", ", hakOne.getSubjects()));
+        // ...
         if (subjects != null) {
             String subject = subjects.get(position);
             holder.subjectList.setText(subject);
         }
-
         if (isStar== true) {
             holder.Interest.setImageResource(R.drawable.baseline_star_24);
             Log.d("TAG", "Star isStar" + isStar);
@@ -90,24 +95,22 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             holder.Interest.setImageResource(R.drawable.ic_baseline_star_outline_24);
             Log.d("TAG", "Star isStar" + isStar);
         }
-
     }
 
     @Override
     public int getItemCount() {
-        if(hakOneList==null) return 0;
-        return hakOneList.size();
+        return hakOneList1.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
-
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView academyName;
         TextView avgTuition;
         TextView subjectList;
         ImageButton Interest;
 
+        // ...
 
-        public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
+        public ViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
             academyName = itemView.findViewById(R.id.HakOne_name);
             avgTuition = itemView.findViewById(R.id.avgTuition);
@@ -118,7 +121,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                 @Override
                 public void onClick(View view) {
                     int position = getAdapterPosition();
-                    HakOneList hakone = hakOneList.get(position);
+                    HakOneList hakone = hakOneList1.get(position);
                     long academyId = hakone.getAcademyId();
 
                     if (hakone.isStar()){
@@ -146,37 +149,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                                 Log.d("Tag", Long.toString(academyId));
                             }
                         });
-
-                    } else {
-                        // 관심 등록을 하지 않은 경우
-
-                        Call<Void> call = apiInterface.postStarAcademy(user_id, academyId);
-                        call.enqueue(new Callback<Void>() {
-                            @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
-                                Log.d("TAG", "Star academyId" + academyId);
-                                // 서버에 post 요청이 성공한 경우
-                                hakone.setStar(true);
-                                Interest.setImageResource(R.drawable.baseline_star_24);
-                                Log.d("Tag","관심 등록 성공");
-                                Log.d("Tag", Long.toString(user_id));
-                                Log.d("Tag", Long.toString(academyId));
-                            }
-
-                            @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
-                                // 서버에 post 요청이 실패한 경우
-                                Toast.makeText(context, "관심 등록 실패", Toast.LENGTH_SHORT).show();
-                                Log.e("TAG", "관심 등록 실패", t);
-                                Log.d("Tag", Long.toString(user_id));
-                                Log.d("Tag", Long.toString(academyId));
-                            }
-                        });
                     }
 
                 }
             });
-
+            // ...
         }
         void bind(HakOneList hakone) {
             academyName.setText(hakone.getAcademyName());
@@ -184,31 +161,5 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             subjectList.setText(String.valueOf(hakone.getSubjects()));
         }
     }
-
-    public void filterList(ArrayList<HakOneList> filteredList) {
-        hakOneList = filteredList;
-        notifyDataSetChanged();
-    }
-
-
-    public void regionSelected(List<HakOneList> regionList) {
-        hakOneList = regionList;
-        notifyDataSetChanged();
-
-    }
-
-    public void subjectSelected(List<HakOneList> subjectList) {
-        hakOneList = subjectList;
-        notifyDataSetChanged();
-    }
-
-    public void gradeSelected(List<HakOneList> gradeList) {
-        hakOneList = gradeList;
-        notifyDataSetChanged();
-    }
-
-    public void sortSelected(List<HakOneList> sortList) {
-        hakOneList = sortList;
-        notifyDataSetChanged();
-    }
 }
+

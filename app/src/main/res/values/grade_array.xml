@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="grade_array">
+        <item>학년</item>
+        <item>초등</item>
+        <item>중등</item>
+        <item>고등</item>
+        <item>기타</item>
+    </string-array>
+</resources>

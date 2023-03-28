@@ -43,6 +43,7 @@ import org.json.simple.parser.ParseException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
@@ -84,6 +85,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         GoogleSignInAccount gsa = GoogleSignIn.getLastSignedInAccount(Login.this);
 
 
+        /*
         // 이미 로그인 되있는 경우
         if (gsa != null && gsa.getId() != null) {
                 //이 경우 로그인 성공
@@ -91,6 +93,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             startActivity(new Intent(getApplicationContext(), Home.class));
 
         }
+
+         */
     }
 
 
@@ -143,6 +147,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 Intent intent = new Intent(getApplicationContext(), Home.class);
                 startActivity(intent);
 
+
                 //추가
                 // TODO(developer): send code to server and exchange for access/refresh/ID tokens
 
@@ -162,6 +167,33 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         // responseBody 이 부분에 담겨있는게 token DTO
                         // 위에 저장을 빼고 받아온 걸로 저장해야 함.
 
+                        Log.d("TAG", "responseBody: " + responseBody);
+
+                        JSONParser parser = new JSONParser();
+                        JSONObject jsonObject = (JSONObject) parser.parse(responseBody);
+                        long user_id = (long) jsonObject.get("user_id");
+
+                        Log.d("TAG", "user_id: " + user_id);
+
+                        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putLong("user_id", user_id);
+                        editor.apply();
+
+
+                        /*
+                        if (statusCode == 200) {
+                            //JSONObject jsonObject = new JSONObject(responseBody);
+                            JSONParser parser = new JSONParser();
+                            Map<String, Object> map = (Map<String, Object>) parser.parse(responseBody);
+                            long user_id = (long) map.get("user_id");
+                            Log.d(TAG, "user_id: " + user_id);
+                        }
+
+                         */
+
+
+/*
                         JSONParser parser = new JSONParser();
                         Object obj = parser.parse(responseBody);
                         JSONObject jsonObj = (JSONObject) obj;
@@ -181,15 +213,13 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         Log.d(TAG, "받아온 결과 email:" +email);
                         Log.d(TAG, "받아온 결과 profile_pic:" +profile_pic);
 
-
-
+ */
                     } catch (ClientProtocolException e) {
                         Log.e(TAG, "Error sending auth code to backend.", e);
                     } catch (IOException | ParseException e) {
                         Log.e(TAG, "Error sending auth code to backend.", e);
                     }
                 }).start();
-
 
 
             } catch (ApiException e) {
