@@ -7,28 +7,32 @@
     android:padding="5dp">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="373dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#F2F8EB"
-        android:orientation="vertical">
+        android:background="#C7F6E3"
+        android:orientation="vertical"
+        >
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
             android:background="#A5E4DF"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
 
             <ImageView
                 android:id="@+id/imageView"
-                android:padding="5dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@drawable/ic_baseline_person_24" />
+                app:srcCompat="@drawable/ic_baseline_person_24"
+                android:paddingBottom="5dp"/>
 
             <TextView
                 android:id="@+id/nickname"
-                android:layout_width="wrap_content"
+                android:layout_width="70dp"
                 android:layout_height="match_parent"
                 android:gravity="center|left"
                 android:layout_weight="1"
@@ -44,12 +48,19 @@
 
             <TextView
                 android:id="@+id/star"
-                android:layout_width="wrap_content"
+                android:layout_width="20dp"
                 android:layout_height="match_parent"
                 android:gravity="center|left"
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:text="리뷰점수" />
+
+            <TextView
+                android:layout_width="10dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginRight="30dp"
+                android:text="점" />
 
             <TextView
                 android:id="@+id/date"
@@ -58,7 +69,8 @@
                 android:gravity="center"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="날짜" />
+                android:text="날짜"
+                android:paddingRight="5dp"/>
 
         </LinearLayout>
 
@@ -69,7 +81,10 @@
             android:layout_height="wrap_content"
             android:background="#85B5B8"
             android:text="리뷰내용"
-            android:padding="5dp">
+            android:paddingLeft="15dp"
+            android:paddingBottom="5dp"
+            android:paddingTop="5dp"
+            android:layout_gravity="center">
         </TextView>
 
 

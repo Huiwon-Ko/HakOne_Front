@@ -9,20 +9,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="  관심페이지"
+        android:text="관심페이지"
+        android:gravity="center"
         android:textStyle="bold"
+        android:padding="15dp"
         android:textSize="30dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/InterestRecyclerView"
         android:layout_width="413dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="70dp"/>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavi"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:itemIconTint="#000000"
         app:itemTextColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"

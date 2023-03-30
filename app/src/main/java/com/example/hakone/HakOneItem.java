@@ -202,11 +202,11 @@ public class HakOneItem extends AppCompatActivity {
                                     academyNameTextView.setText(academyName);
                                     avg_scoreTextView.setText(String.valueOf(avg_score));
                                     review_countTextView.setText(String.valueOf(review_count));
-                                    subjectListTextView.setText(String.valueOf(itemsubjects));
-                                    telTextView.setText(String.valueOf(tel));
-                                    addressTextView.setText(String.valueOf(address));
-                                    teacherTextView.setText(String.valueOf(teacher));
-                                    avgTuitionTextView.setText(String.valueOf(avg_tuition));
+                                    subjectListTextView.setText(" 과목: " + String.valueOf(itemsubjects));
+                                    telTextView.setText(" 전화번호: " +String.valueOf(tel));
+                                    addressTextView.setText(" 주소: " +String.valueOf(address));
+                                    teacherTextView.setText(" 선생님 수: " +String.valueOf(teacher));
+                                    avgTuitionTextView.setText(" 월 평균 수강료: " +String.valueOf(avg_tuition) + "원");
 
 
                                     // UI 작업 수행
@@ -219,12 +219,12 @@ public class HakOneItem extends AppCompatActivity {
                                         tableRow.setLayoutParams(new TableLayout.LayoutParams(TableLayout.LayoutParams.MATCH_PARENT, TableLayout.LayoutParams.WRAP_CONTENT)); // TableRow의 LayoutParams 설정
 
                                         TextView classNameTextView = new TextView(getApplicationContext()); // 반 이름을 보여줄 TextView 생성
-                                        classNameTextView.setText(className); // TextView에 반 이름 설정
+                                        classNameTextView.setText("  " + className); // TextView에 반 이름 설정
                                         classNameTextView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f)); // TextView의 LayoutParams 설정
                                         tableRow.addView(classNameTextView); // TableRow에 TextView 추가
 
                                         TextView tuitionTextView = new TextView(getApplicationContext()); // 수강료를 보여줄 TextView 생성
-                                        tuitionTextView.setText(String.valueOf(tuition)); // TextView에 수강료 설정
+                                        tuitionTextView.setText("  "+ String.valueOf(tuition) + "원"); // TextView에 수강료 설정
                                         tuitionTextView.setLayoutParams(new TableRow.LayoutParams(TableRow.LayoutParams.WRAP_CONTENT, TableRow.LayoutParams.WRAP_CONTENT, 1f)); // TextView의 LayoutParams 설정
                                         tableRow.addView(tuitionTextView); // TableRow에 TextView 추가
 

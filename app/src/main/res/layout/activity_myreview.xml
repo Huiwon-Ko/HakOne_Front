@@ -9,14 +9,17 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="내 리뷰 페이지"
-        android:textSize="40dp">
+        android:text="내가 작성한 리뷰 페이지"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:padding="15dp"
+        android:textSize="30dp">
     </TextView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/MyReviewRecyclerView"
         android:layout_width="413dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp" />
+        android:layout_marginTop="70dp"/>
 
 </RelativeLayout>

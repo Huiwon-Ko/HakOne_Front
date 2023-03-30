@@ -11,13 +11,16 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -52,8 +55,22 @@ public class MyPage extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         long user_id = sharedPreferences.getLong("user_id", 0);
+        String name = sharedPreferences.getString("name", "");
+        String profile_pic = sharedPreferences.getString("profile_pic", "");
 
         Log.d("TAG", "MyPage 받아온 결과 user_id:" +user_id);
+        Log.d("TAG", "MyPage 받아온 결과 name:" +name);
+        Log.d("TAG", "MyPage 받아온 결과 profile_pic:" +profile_pic);
+
+
+        TextView nickname = (TextView)findViewById(R.id.nickname);
+        nickname.setText(name);
+
+        ImageView profile = (ImageView)findViewById(R.id.profile);
+
+        Glide.with(this)
+                .load(profile_pic)
+                .into(profile);
 
 
         listView = (ListView)findViewById(R.id.mypage_list);
@@ -86,24 +103,19 @@ public class MyPage extends AppCompatActivity {
             }
         });
 
-        data.add("          개인정보 수정");
-        data.add("          내가 작성한 리뷰");
-        data.add("          회원탈퇴");
+        //data.add("          개인정보 수정");
+        data.add("              내가 작성한 리뷰");
+        data.add("              회원탈퇴");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 if (position==0)
                 {
-                    Intent intent = new Intent(MyPage.this, ChangeProfile.class);
-                    startActivity(intent);
-                }
-                if (position==1)
-                {
                     Intent intent = new Intent(MyPage.this, MyReview.class);
                     startActivity(intent);
                 }
-                if (position==2)
+                if (position==1)
                 {
                     AlertDialog.Builder builder = new AlertDialog.Builder(MyPage.this);
                     builder.setTitle("회원탈퇴");
