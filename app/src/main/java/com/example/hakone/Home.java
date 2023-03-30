@@ -386,10 +386,17 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
                             //float avg_score = jsonObject.getInt("avg_score");
                             int review_count = jsonObject.getInt("review_count");
 
+
+
                             HakOneList hakOne = new HakOneList(academyName, avgTuition, region, subjects,
                                     korean, english, math, social, science, foreign, essay, art, sub_etc,
-                                    elementary, middle, high, grace_etc, isStar, academyId);
+                                    elementary, middle, high, grace_etc, isStar, academyId, avg_score, review_count);
                             hakOneList.add(hakOne);
+
+                            //Log.d("Tag", "Home"+academyName );
+                            //Log.d("Tag", "Home"+avg_score);
+                            //Log.d("Tag", "Home"+review_count);
+
 
                             if (hakOne.isStar()) {
                                 hakOneList1.add(hakOne);
@@ -401,7 +408,6 @@ public class Home extends AppCompatActivity implements RecyclerViewInterface{
                         for (HakOneList hakOne : hakOneList1) {
                             Log.d("Tag", "name: " + hakOne.getAcademyName() + ", avgTuition: " + hakOne.getAvgTuition());
                         }
-
 
 
                         Log.d("Tag", "hakOneList1" + hakOneList1); //이거는 보여짐

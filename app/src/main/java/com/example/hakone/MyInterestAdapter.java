@@ -3,6 +3,7 @@ package com.example.hakone;
 import static com.example.hakone.ApiClient.BASE_URL;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.text.TextUtils;
 import android.util.Log;
@@ -41,6 +42,8 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
 
     private final ApiInterface apiInterface;
 
+    private SharedPreferences sharedPreferences;
+
 
     public MyInterestAdapter(List<HakOneList> hakOneList1, Context context, List<String> subjects, RecyclerViewInterface recyclerViewInterface, long user_id, long academyId, boolean isStar) {
         this.hakOneList1 = hakOneList1;
@@ -60,6 +63,8 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
         editor.apply();
 
          */
+
+        sharedPreferences = context.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(BASE_URL)
@@ -107,6 +112,8 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
         TextView avgTuition;
         TextView subjectList;
         ImageButton Interest;
+        TextView avg_score;
+        TextView review_count;
 
         // ...
 
@@ -116,6 +123,27 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
             avgTuition = itemView.findViewById(R.id.avgTuition);
             subjectList = itemView.findViewById(R.id.Subject_list);
             Interest = itemView.findViewById(R.id.Interest);
+            avg_score = itemView.findViewById(R.id.avg_score);
+            review_count = itemView.findViewById(R.id.review_count);
+
+
+            itemView.setClickable(true);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int position = getAdapterPosition();
+                    if(position != RecyclerView.NO_POSITION){
+                        long clickedAcademyId = hakOneList1.get(position).getAcademyId();
+                        SharedPreferences.Editor editor = sharedPreferences.edit();
+                        editor.putLong("academyId", clickedAcademyId);
+                        editor.apply();
+
+                        Intent intent = new Intent(context, HakOneItem.class).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        context.startActivity(intent);
+                    }
+                }
+            });
+
 
             Interest.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -159,6 +187,8 @@ public class MyInterestAdapter extends RecyclerView.Adapter<MyInterestAdapter.Vi
             academyName.setText(hakone.getAcademyName());
             avgTuition.setText(String.valueOf(hakone.getAvgTuition()));
             subjectList.setText(String.valueOf(hakone.getSubjects()));
+            avg_score.setText(String.valueOf(hakone.getAvg_score()));
+            review_count.setText(String.valueOf(hakone.getReview_count()));
         }
     }
 }

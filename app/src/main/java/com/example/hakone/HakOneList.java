@@ -40,11 +40,14 @@ public class HakOneList {
 
     private HashMap<String, Integer> classList;
 
+    private float avg_score;
+    private int review_count;
+
 
     public HakOneList(String academyName, int avgTuition, String region, List<String> subjects,
                       boolean korean, boolean english, boolean math, boolean social, boolean science,
                       boolean foreign, boolean essay, boolean art, boolean sub_etc,
-                      boolean elementary, boolean middle, boolean high, boolean grade_etc, boolean isStar, long academyId) {
+                      boolean elementary, boolean middle, boolean high, boolean grade_etc, boolean isStar, long academyId, float avg_score, int review_count) {
         this.academyName = academyName;
         this.avgTuition = avgTuition;
         this.region = region;
@@ -69,6 +72,9 @@ public class HakOneList {
 
         this.isStar = isStar;
         this.academyId = academyId;
+
+        this.avg_score = avg_score;
+        this.review_count = review_count;
 
     }
 
@@ -246,6 +252,23 @@ public class HakOneList {
     }
     public void setClassList(HashMap<String, Integer> classList) {
         this.classList = classList;
+    }
+
+
+
+    public float getAvg_score(){
+        return avg_score;
+    }
+    public void setAvg_score(float avg_score) {
+        this.avg_score = avg_score;
+    }
+
+
+    public int getReview_count(){
+        return review_count;
+    }
+    public void setReview_count(int review_count) {
+        this.review_count = review_count;
     }
 
 }
