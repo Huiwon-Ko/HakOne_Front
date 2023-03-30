@@ -57,6 +57,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private SharedPreferences preferences;
     public long user_id;
+    public String name;
+    public String profile_pic;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { //앱이 실행될 떄 처음 수행되는 곳
@@ -172,12 +174,19 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                         JSONParser parser = new JSONParser();
                         JSONObject jsonObject = (JSONObject) parser.parse(responseBody);
                         long user_id = (long) jsonObject.get("user_id");
+                        String name = (String) jsonObject.get("name");
+                        String profile_pic = (String) jsonObject.get("profile_pic");
 
                         Log.d("TAG", "user_id: " + user_id);
+                        Log.d("TAG", "name: " + name);
+                        Log.d("TAG", "profile_pic: " + profile_pic);
 
                         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.putLong("user_id", user_id);
+                        editor.putString("name", name);
+                        editor.putString("profile_pic", profile_pic);
+
                         editor.apply();
 
 

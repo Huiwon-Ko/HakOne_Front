@@ -10,24 +10,28 @@
         android:id="@+id/profile"
         android:layout_width="102dp"
         android:layout_height="104dp"
-        android:layout_marginStart="76dp"
+        android:layout_marginStart="64dp"
         android:layout_marginTop="56dp"
         android:src="@mipmap/ic_launcher_round"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <TextView
         android:id="@+id/nickname"
+        android:textColor="@color/black"
         android:layout_width="110dp"
         android:layout_height="40dp"
+        android:gravity="center"
         android:text="닉네임"
+        android:textSize="20dp"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/profile"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toEndOf="@+id/profile"
         app:layout_constraintTop_toTopOf="@+id/profile"
-        app:layout_constraintVertical_bias="0.647" />
-
+        app:layout_constraintVertical_bias="0.609" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -54,7 +58,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavi"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         app:itemIconTint="#000000"
         app:itemTextColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -69,10 +73,10 @@
         android:text="로그아웃"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/profile"
+        app:layout_constraintHorizontal_bias="0.894"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile"
-        app:layout_constraintVertical_bias="0.673" />
+        app:layout_constraintVertical_bias="0.714" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

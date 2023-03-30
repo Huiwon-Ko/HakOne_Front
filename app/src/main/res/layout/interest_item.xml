@@ -7,16 +7,16 @@
     android:padding="5dp">
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="373dp"
         android:layout_height="120dp"
         android:layout_gravity="center"
-        android:background="#F2F8EB"
+        android:background="#DDCAFF"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#A5E4DF"
+            android:background="#BFACE2  "
             android:orientation="horizontal">
 
             <TextView
@@ -26,17 +26,9 @@
                 android:gravity="center|left"
                 android:layout_weight="1"
                 android:padding="10dp"
-                android:text="학원 이름" />
-
-            <ImageButton
-                android:id="@+id/Call"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:enabled="true"
-                android:contentDescription="Call"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_baseline_local_phone_24" />
+                android:text="학원 이름"
+                android:textStyle="bold"
+                android:textSize="15dp"/>
 
             <ImageButton
                 android:id="@+id/Interest"
@@ -64,10 +56,10 @@
             android:id="@+id/Subject_list"
             android:layout_width="match_parent"
             android:layout_height="33dp"
-            android:background="#85B5B8"
+            android:background="#D1BFFA  "
             android:orientation="horizontal"
             android:text="과목"
-            android:padding="5dp">
+            android:padding="6dp">
         </TextView>
 
         <LinearLayout
@@ -87,23 +79,34 @@
                 android:id="@+id/avg_score"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:gravity="center|left"
+                android:gravity="center"
                 android:padding="3dp"
                 android:text="리뷰 점수" />
+
+            <TextView
+                android:layout_width="18dp"
+                android:layout_height="match_parent"
+                android:gravity="center|right"
+                android:layout_marginRight="7dp"
+                android:text="점" />
 
             <TextView
                 android:id="@+id/review_count"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:gravity="center|left"
+                android:gravity="center"
                 android:padding="3dp"
                 android:text="리뷰 개수" />
+            <TextView
+                android:layout_width="18dp"
+                android:layout_height="match_parent"
+                android:gravity="center|right"
+                android:layout_marginRight="7dp"
+                android:text="개" />
 
             <TextView
                 android:id="@+id/avgTuition"
-                android:layout_width="190dp"
+                android:layout_width="210dp"
                 android:layout_height="match_parent"
                 android:gravity="center|right"
                 android:text="월 평균 학원비" />

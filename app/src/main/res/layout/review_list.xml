@@ -8,22 +8,29 @@
     tools:context=".Home"
     android:orientation="vertical">
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="학원 리뷰 리스트"/>
+        android:text="학원 리뷰 리스트"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:padding="15dp"
+        android:textSize="30dp"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ReviewRecyclerView"
-        android:layout_width="413dp"
+        android:layout_width="wrap_content"
         android:layout_height="540dp"
         android:layout_marginTop="4dp" />
 
     <ImageButton
         android:id="@+id/review_write"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        app:srcCompat="@drawable/baseline_add_box_24"/>
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        app:srcCompat="@drawable/baseline_add_box_24"
+        android:layout_gravity="right"
+        />
 
 
 
