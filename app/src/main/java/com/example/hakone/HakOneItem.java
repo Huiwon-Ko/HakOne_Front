@@ -1,19 +1,27 @@
 package com.example.hakone;
 
+import static com.example.hakone.ApiClient.BASE_URL;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.naver.maps.geometry.LatLng;
 import com.naver.maps.map.CameraAnimation;
 import com.naver.maps.map.CameraUpdate;
@@ -40,7 +48,9 @@ import java.util.Map;
 //mport okhttp3.Address;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
+import retrofit2.Callback;
 import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class HakOneItem extends AppCompatActivity {
 
@@ -54,6 +64,13 @@ public class HakOneItem extends AppCompatActivity {
 
     private MapView mapView;
     private static NaverMap naverMap;
+    Retrofit retrofit = new Retrofit.Builder()
+            .baseUrl(BASE_URL)
+            .build();
+    private ApiInterface apiInterface = retrofit.create(ApiInterface.class);
+
+    BottomNavigationView bottomNavigationView;
+
 
 
     protected void onCreate(Bundle savedInstanceState){
@@ -64,11 +81,19 @@ public class HakOneItem extends AppCompatActivity {
                 new NaverMapSdk.NaverCloudPlatformClient("msuzzar6hb")
         );
 
+        /*
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL)
+                .build();
+
+         */
+        apiInterface = retrofit.create(ApiInterface.class);
+
 
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
         long user_id = sharedPreferences.getLong("user_id", 0);
         long academyId = sharedPreferences.getLong("academyId", 0);
-        //boolean isStar = sharedPreferences.getBoolean("isStar", false);
+        boolean isStar = sharedPreferences.getBoolean("isStar", false);
 
         Log.d("TAG", "hakOneItem user_id"+ user_id);
         Log.d("TAG", "hakOneItem academyId"+ academyId);
@@ -256,5 +281,113 @@ public class HakOneItem extends AppCompatActivity {
             }
         }).start();
 
+
+
+        Button Review = (Button) findViewById(R.id.Review);
+        Review.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), ReviewList.class);
+                startActivity(intent);
+            }
+        });
+
+
+
+        Button Interest = (Button) findViewById(R.id.Interest);
+        Interest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                //int position = getAdapterPosition();
+                //HakOneList hakone = hakOneList.get(position);
+                //long academyId = hakone.getAcademyId();
+
+                if (isStar){
+                    // 등록 취소
+                    Call<Void> call = apiInterface.deleteStarAcademy(user_id, academyId);
+
+                    call.enqueue(new Callback<Void>() {
+                        @Override
+                        public void onResponse(Call<Void> call, Response<Void> response) {
+                            Log.d("TAG", "Star academyId" + academyId);
+                            // 서버에 delete 요청이 성공한 경우
+                            //Interest.setImageResource(R.drawable.ic_baseline_star_outline_24);
+                            Drawable newDrawable = getResources().getDrawable(R.drawable.ic_baseline_star_outline_24);
+                            Interest.setCompoundDrawablesWithIntrinsicBounds(null, null, newDrawable, null);
+                            Log.d("Tag", "관심 취소 성공");
+                            Log.d("Tag", Long.toString(user_id));
+                            Log.d("Tag", Long.toString(academyId));
+                        }
+                        @Override
+                        public void onFailure(Call<Void> call, Throwable t) {
+                            // 서버에 delete 요청이 실패한 경우
+                            Toast.makeText(getApplicationContext(), "관심 취소 실패", Toast.LENGTH_SHORT).show();
+                            Log.e("TAG", "관심 취소 실패", t);
+                            Log.d("Tag", Long.toString(user_id));
+                            Log.d("Tag", Long.toString(academyId));
+                        }
+                    });
+
+                } else {
+                    // 관심 등록을 하지 않은 경우
+
+                    Call<ResponseBody> call = apiInterface.postStarAcademy(user_id, academyId);
+                    call.enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            Log.d("TAG", "Star academyId" + academyId);
+                            // 서버에 post 요청이 성공한 경우
+                            //hakone.setStar(true);
+                            //Interest.setImageResource(R.drawable.baseline_star_24);
+                            Drawable newDrawable = getResources().getDrawable(R.drawable.baseline_star_24);
+                            Interest.setCompoundDrawablesWithIntrinsicBounds(null, null, newDrawable, null);
+                            Log.d("Tag","관심 등록 성공");
+                            Log.d("Tag", Long.toString(user_id));
+                            Log.d("Tag", Long.toString(academyId));
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            // 서버에 post 요청이 실패한 경우
+                            Toast.makeText(getApplicationContext(), "관심 등록 실패", Toast.LENGTH_SHORT).show();
+                            Log.e("TAG", "관심 등록 실패", t);
+                            Log.d("Tag", Long.toString(user_id));
+                            Log.d("Tag", Long.toString(academyId));
+                        }
+                    });
+                }
+
+            }
+        });
+        bottomNavigationView = findViewById(R.id.bottomNavi);
+        bottomNavigationView.setSelectedItemId(R.id.action_list);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId())
+                {
+                    case R.id.action_star:
+                        startActivity(new Intent(getApplicationContext(), MyInterest.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.action_list:
+                        startActivity(new Intent(getApplicationContext(), Home.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.action_my:
+                        startActivity(new Intent(getApplicationContext(), MyPage.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
+            }
+        });
+
     }
+
+
 }

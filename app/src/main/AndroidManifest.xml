@@ -39,6 +39,8 @@
         <activity android:name="com.example.hakone.ChangeProfile"></activity>
         <activity android:name="com.example.hakone.MyReview"></activity>
         <activity android:name="com.example.hakone.HakOneItem"></activity>
+        <activity android:name="com.example.hakone.ReviewList"></activity>
+        <activity android:name="com.example.hakone.WriteReview"></activity>
 
 
         <meta-data
@@ -46,5 +48,9 @@
             android:value="msuzzar6hb" />
 
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 </manifest>

@@ -84,19 +84,21 @@
                 app:srcCompat="@android:drawable/star_big_on" />
 
             <TextView
-                android:id="@+id/review_point"
+                android:id="@+id/avg_score"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:gravity="center|left"
+                android:padding="3dp"
                 android:text="리뷰 점수" />
 
             <TextView
-                android:id="@+id/review_num"
+                android:id="@+id/review_count"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="0"
                 android:gravity="center|left"
+                android:padding="3dp"
                 android:text="리뷰 개수" />
 
             <TextView

@@ -64,6 +64,18 @@
             android:padding="5dp">
         </TextView>
 
+        <TextView
+            android:id="@+id/created_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#85B5B8"
+            android:text="리뷰작성일"
+            android:padding="5dp"
+            android:layout_gravity="center|right">
+
+        </TextView>
+
+
     </LinearLayout>
 
 </LinearLayout>

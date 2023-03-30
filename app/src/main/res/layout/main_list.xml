@@ -29,16 +29,6 @@
                 android:text="학원 이름" />
 
             <ImageButton
-                android:id="@+id/Call"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:enabled="true"
-                android:contentDescription="Call"
-                android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_baseline_local_phone_24" />
-
-            <ImageButton
                 android:id="@+id/Interest"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
@@ -87,20 +77,20 @@
                 app:srcCompat="@android:drawable/star_big_on" />
 
             <TextView
-                android:id="@+id/review_point"
+                android:id="@+id/avg_score"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:gravity="center|left"
-                android:text="리뷰 점수" />
+                android:gravity="center"
+                android:text="리뷰 점수"
+                android:padding="3dp"/>
 
             <TextView
-                android:id="@+id/review_num"
+                android:id="@+id/review_count"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_weight="0"
-                android:gravity="center|left"
-                android:text="리뷰 개수" />
+                android:gravity="center"
+                android:text="리뷰 개수"
+                android:padding="3dp"/>
 
             <TextView
                 android:id="@+id/avgTuition"

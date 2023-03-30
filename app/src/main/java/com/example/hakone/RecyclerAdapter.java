@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -107,7 +108,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
         TextView avgTuition;
         TextView subjectList;
         ImageButton Interest;
-
+        TextView avg_score;
+        TextView review_count;
 
         public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
             super(itemView);
@@ -115,6 +117,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             avgTuition = itemView.findViewById(R.id.avgTuition);
             subjectList = itemView.findViewById(R.id.Subject_list);
             Interest = itemView.findViewById(R.id.Interest);
+            avg_score = itemView.findViewById(R.id.avg_score);
+            review_count = itemView.findViewById(R.id.review_count);
+
+
+            //Log.d("Tag", "리뷰점수" + review_point.toString());
+            //Log.d("Tag", "리뷰점수" + review_count.toString());
 
 
             itemView.setClickable(true);
@@ -170,10 +178,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                     } else {
                         // 관심 등록을 하지 않은 경우
 
-                        Call<Void> call = apiInterface.postStarAcademy(user_id, academyId);
-                        call.enqueue(new Callback<Void>() {
+                        Call<ResponseBody> call = apiInterface.postStarAcademy(user_id, academyId);
+                        call.enqueue(new Callback<ResponseBody>() {
                             @Override
-                            public void onResponse(Call<Void> call, Response<Void> response) {
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 Log.d("TAG", "Star academyId" + academyId);
                                 // 서버에 post 요청이 성공한 경우
                                 hakone.setStar(true);
@@ -184,7 +192,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
                             }
 
                             @Override
-                            public void onFailure(Call<Void> call, Throwable t) {
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
                                 // 서버에 post 요청이 실패한 경우
                                 Toast.makeText(context, "관심 등록 실패", Toast.LENGTH_SHORT).show();
                                 Log.e("TAG", "관심 등록 실패", t);
@@ -202,6 +210,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.MyView
             academyName.setText(hakone.getAcademyName());
             avgTuition.setText(String.valueOf(hakone.getAvgTuition()));
             subjectList.setText(String.valueOf(hakone.getSubjects()));
+            avg_score.setText(String.valueOf(hakone.getAvg_score()));
+            review_count.setText(String.valueOf(hakone.getReview_count()));
+            //Log.d("Tag", "리사이클러어댑터 review_point"+review_point);
+            //Log.d("Tag", "리사이클러어댑터 review_count"+review_count);
         }
     }
 

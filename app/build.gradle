@@ -79,6 +79,7 @@ dependencies {
         exclude group: 'com.android.support'
     }
 
+
 }
 configurations.all {
     resolutionStrategy.dependencySubstitution {

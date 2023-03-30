@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Home"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="학원 리뷰 리스트"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/ReviewRecyclerView"
+        android:layout_width="413dp"
+        android:layout_height="540dp"
+        android:layout_marginTop="4dp" />
+
+    <ImageButton
+        android:id="@+id/review_write"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@drawable/baseline_add_box_24"/>
+
+
+
+
+</LinearLayout>
