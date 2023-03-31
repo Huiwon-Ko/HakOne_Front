@@ -28,7 +28,8 @@
                 android:padding="10dp"
                 android:text="학원 이름"
                 android:textStyle="bold"
-                android:textSize="15dp"/>
+                android:textSize="21dp"
+                android:textColor="@color/black"/>
 
             <ImageButton
                 android:id="@+id/Interest"
@@ -76,7 +77,7 @@
                 android:padding="5dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@android:drawable/star_big_on" />
+                app:srcCompat="@drawable/baseline_star_24_purple" />
 
             <TextView
                 android:id="@+id/avg_score"

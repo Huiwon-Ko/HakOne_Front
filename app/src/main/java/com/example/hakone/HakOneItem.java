@@ -202,11 +202,11 @@ public class HakOneItem extends AppCompatActivity {
                                     academyNameTextView.setText(academyName);
                                     avg_scoreTextView.setText(String.valueOf(avg_score));
                                     review_countTextView.setText(String.valueOf(review_count));
-                                    subjectListTextView.setText(" 과목: " + String.valueOf(itemsubjects));
-                                    telTextView.setText(" 전화번호: " +String.valueOf(tel));
-                                    addressTextView.setText(" 주소: " +String.valueOf(address));
-                                    teacherTextView.setText(" 선생님 수: " +String.valueOf(teacher));
-                                    avgTuitionTextView.setText(" 월 평균 수강료: " +String.valueOf(avg_tuition) + "원");
+                                    subjectListTextView.setText(" 과목  " + String.valueOf(itemsubjects));
+                                    telTextView.setText(" 전화번호  " +String.valueOf(tel));
+                                    addressTextView.setText(" 주소  " +String.valueOf(address));
+                                    teacherTextView.setText(" 선생님 수  " +String.valueOf(teacher));
+                                    avgTuitionTextView.setText(" 월 평균 수강료  " +String.valueOf(avg_tuition) + "원");
 
 
                                     // UI 작업 수행

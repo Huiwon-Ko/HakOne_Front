@@ -2,6 +2,7 @@ package com.example.hakone;
 
 //import static com.naver.maps.map.g.a.t;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -105,7 +106,7 @@ public class WriteReview extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                AlertDialog.Builder alertDialogBuilder  = new AlertDialog.Builder(WriteReview.this);
+                //AlertDialog.Builder alertDialogBuilder  = new AlertDialog.Builder(WriteReview.this);
                 reviewContent = mEditTextreview.getText().toString();
                 Log.d("TAG", "write 전체 userImage" +  userImage);
                 Log.d("TAG", "write 전체 rate" +  rate);
@@ -129,93 +130,43 @@ public class WriteReview extends AppCompatActivity {
                     call.enqueue(new Callback<RequestBody>() {
                         @Override
                         public void onResponse(Call<RequestBody> call, Response<RequestBody> response){
-                            Log.d("TAG", "성공" + response.code());
+                            Log.d("TAG", "response"+ response.code());
                             if (response.code() == 409) {
                                 // response가 409일 경우에만 Toast 메시지 출력
                                 Toast.makeText(WriteReview.this, "이미 리뷰를 등록한 회원입니다", Toast.LENGTH_SHORT).show();
                             } else {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(WriteReview.this)
-                                        .setTitle("리뷰 작성 완료")
-                                        .setMessage("리뷰작성이 완료되었습니다.")
-                                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                            @Override
-                                            public void onClick(DialogInterface dialog, int which) {
-                                                finish();
-                                            }
-                                        });
 
-                                dialog = builder.create();
-                                dialog.show();
-
-                                Toast.makeText(WriteReview.this, "등록되었습니다", Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(WriteReview.this, "등록되었습니다", Toast.LENGTH_SHORT).show();
                                 Log.d("TAG", "성공");
                                 Log.d("TAG", "성공" + response);
-
                             }
                         }
+
                         @Override
                         public void onFailure(Call<RequestBody> call, Throwable t) {
                             // 서버에 전달 중 오류가 발생했을 때의 처리
                             Log.d("TAG", "실패" + t);
-
-                        }
-                    });
-
-
-                    /*
-                    dialog = new AlertDialog.Builder(WriteReview.this)
-                            .setTitle("리뷰 작성 완료")
-                            .setMessage("리뷰작성이 완료되었습니다.")
-                            .setNegativeButton("확인", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ApiInterface apiInterface = ApiClient.getClient().create(ApiInterface.class);
-                                    Call<RequestBody> call = apiInterface.postReview(userImagePart, rateBody, reviewContentBody, user_id, academyId);
-                                    call.enqueue(new Callback<RequestBody>() {
-
+                            //Toast.makeText(WriteReview.this, "등록되었습니다", Toast.LENGTH_SHORT).show();
+                            AlertDialog.Builder builder = new AlertDialog.Builder(WriteReview.this)
+                                    .setTitle("리뷰 작성 완료")
+                                    .setMessage("리뷰작성이 완료되었습니다.")
+                                    .setPositiveButton("확인", new DialogInterface.OnClickListener() {
                                         @Override
-                                        public void onResponse(Call<RequestBody> call, Response<RequestBody> response) {
-
-                                            Log.d("TAG", "성공" + response.code());
-                                            if (response.code() == 409) {
-                                                // response가 409일 경우에만 Toast 메시지 출력
-                                                Toast.makeText(WriteReview.this, "이미 리뷰를 등록한 회원입니다", Toast.LENGTH_SHORT).show();
-                                            } else {
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(WriteReview.this)
-                                                        .setTitle("리뷰 작성 완료")
-                                                        .setMessage("리뷰작성이 완료되었습니다.")
-                                                        .setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                                                            @Override
-                                                            public void onClick(DialogInterface dialog, int which) {
-                                                                finish();
-                                                            }
-                                                        });
-
-                                                dialog = builder.create();
-                                                dialog.show();
-
-                                                Toast.makeText(WriteReview.this, "등록되었습니다", Toast.LENGTH_SHORT).show();
-                                                Log.d("TAG", "성공");
-                                                Log.d("TAG", "성공" + response);
-
-
-                                            }
-
-                                        }
-
-                                        @Override
-                                        public void onFailure(Call<RequestBody> call, Throwable t) {
-                                            // 서버에 전달 중 오류가 발생했을 때의 처리
-                                            Log.d("TAG", "실패" + t);
-
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            //finish();
+                                            ((Activity)getApplicationContext()).finish(); // 현재 액티비티 종료
+                                            Intent intent = new Intent(getApplicationContext(), ReviewList.class); // 새로운 액티비티 열기
+                                            getApplicationContext().startActivity(intent);
                                         }
                                     });
-                                    finish();
-                                }
-                            })
-                            .create();
 
-                     */
+                            AlertDialog dialog = builder.create();
+                            dialog.show();
+
+                        }
+
+
+                    });
 
                 } else {
                     // userImagePart, rateBody, reviewContentBody 중 하나라도 null이면 AlertDialog를 보여주지 않고 Toast 메시지를 띄웁니다.

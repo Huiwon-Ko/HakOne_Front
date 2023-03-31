@@ -2,7 +2,9 @@ package com.example.hakone;
 
 import static com.example.hakone.ApiClient.BASE_URL;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -118,6 +120,11 @@ public class MyReviewAdapter extends RecyclerView.Adapter<MyReviewAdapter.MyView
                             Log.d("Tag", "리뷰 삭제 성공");
                             Log.d("Tag", Long.toString(review_id));
                             Log.d("Tag", Long.toString(academy_id));
+
+                            ((Activity)context).finish(); // 현재 액티비티 종료
+                            Intent intent = new Intent(context, MyReview.class); // 새로운 액티비티 열기
+                            context.startActivity(intent);
+
                         }
                         @Override
                         public void onFailure(Call<Void> call, Throwable t) {
@@ -127,6 +134,7 @@ public class MyReviewAdapter extends RecyclerView.Adapter<MyReviewAdapter.MyView
                             Log.d("Tag", Long.toString(academy_id));
                         }
                     });
+
                 }
             });
         }
