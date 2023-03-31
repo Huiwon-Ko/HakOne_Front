@@ -10,11 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.bumptech.glide.Glide;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -61,7 +64,7 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
     @Override
     public ReviewListAdapter.MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.review_list_item, parent, false);
-        ReviewListAdapter.MyViewHolder viewHolder = new ReviewListAdapter.MyViewHolder(view);
+        ReviewListAdapter.MyViewHolder viewHolder = new ReviewListAdapter.MyViewHolder(view, parent.getContext());
         return viewHolder;
     }
 
@@ -81,18 +84,22 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
+        Context context;
         TextView nickname;
         TextView star;
         TextView date;
         TextView review_content;
+        ImageView imageView;
 
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView, Context context) {
             super(itemView);
             nickname = itemView.findViewById(R.id.nickname);
             star = itemView.findViewById(R.id.star);
             date = itemView.findViewById(R.id.date);
             review_content = itemView.findViewById(R.id.review_content);
+            imageView = itemView.findViewById(R.id.imageView);
+            this.context = context;
 
         }
         void bind(ReviewListContent hakone) {
@@ -100,8 +107,10 @@ public class ReviewListAdapter extends RecyclerView.Adapter<ReviewListAdapter.My
             star.setText(String.valueOf(hakone.getScore()));
             date.setText(String.valueOf(hakone.getCreated_date()));
             review_content.setText(String.valueOf(hakone.getContent()));
+            Glide.with(context)
+                    .load(hakone.getProfile_pic())
+                    .into(imageView);
         }
     }
-
 
 }

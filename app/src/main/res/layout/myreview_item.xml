@@ -10,34 +10,34 @@
         android:layout_width="373dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="#C7F6E3"
+        android:background="#DDCAFF"
         android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:background="#A5E4DF   "
+            android:background="#BFACE2 "
             android:orientation="horizontal"
             android:paddingRight="5dp">
 
 
             <TextView
                 android:id="@+id/academyName"
-                android:layout_width="wrap_content"
+                android:layout_width="150dp"
                 android:layout_height="match_parent"
                 android:gravity="center|left"
                 android:layout_weight="1"
                 android:padding="10dp"
                 android:text="학원이름"
                 android:textStyle="bold"
-                android:textSize="15dp"/>
+                android:textSize="16dp"
+                android:textColor="@color/black"/>
 
             <ImageView
                 android:id="@+id/starImageView"
-
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                app:srcCompat="@android:drawable/star_big_on"/>
+                app:srcCompat="@drawable/baseline_star_24_purple"/>
 
             <TextView
                 android:id="@+id/mystar"
@@ -69,8 +69,9 @@
         <TextView
             android:id="@+id/review_content"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#85B5B8  "
+            android:layout_height="40dp"
+            android:gravity="center|left"
+            android:background="#D1BFFA    "
             android:text="리뷰내용"
             android:paddingLeft="15dp"
             android:paddingBottom="5dp"
@@ -83,7 +84,7 @@
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:gravity="center"
-            android:background="#C7F6E3"
+            android:background="#DDCAFF"
             android:text="리뷰작성일"
             android:paddingRight="15dp"
             android:layout_gravity="center|right">

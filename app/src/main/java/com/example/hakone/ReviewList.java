@@ -7,13 +7,17 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +50,7 @@ public class ReviewList extends AppCompatActivity {
     public float score;
     public String created_date;
     public String content;
+    BottomNavigationView bottomNavigationView;
     RecyclerView recyclerView; // 리사이클러뷰 객체 선언
     ReviewListAdapter adapter;
 
@@ -147,6 +152,33 @@ public class ReviewList extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), WriteReview.class);
                 startActivity(intent);
+            }
+        });
+
+        bottomNavigationView = findViewById(R.id.bottomNavi);
+        bottomNavigationView.setSelectedItemId(R.id.action_my);
+
+        bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                switch (item.getItemId())
+                {
+                    case R.id.action_star:
+                        startActivity(new Intent(getApplicationContext(), MyInterest.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.action_list:
+                        startActivity(new Intent(getApplicationContext(), Home.class));
+                        overridePendingTransition(0,0);
+                        return true;
+
+                    case R.id.action_my:
+                        startActivity(new Intent(getApplicationContext(), MyPage.class));
+                        overridePendingTransition(0,0);
+                        return true;
+                }
+                return false;
             }
         });
     }
